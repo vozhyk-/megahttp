@@ -1,0 +1,31 @@
+This is going to be a HTTP server that streams files from mega.co.nz
+cloud storage.
+
+A client would request the file with a URL like this:
+http://localhost:8080/?url=<MEGA_URL>
+where MEGA_URL is a URL to a shared file in MEGA, or
+http://localhost:8080/?file=/Root/FILE_PATH
+which would get FILE_PATH from the configured MEGA account.
+
+Caching of downloaded files from MEGA is planned: either in-memory
+caching or saving the files to disk (with configurable cache size limits).
+
+Configuration would be achieved with a megahttp.conf file in the
+source directory or in the user's home directory. It would contain
+options like MEGA authentication information and caching options.
+
+Library requirements:
+|- MEGA SDK  - for interacting with MEGA - github.com/meganz/sdk
+|- libasyncd - HTTP server library (can be changed to another one in the future)
+|  - github.com/wolkykim/libasyncd
+|- threads, if a single-theaded model doesn't work
+|  \- pthread or C++ threads
+\- CMake     - build system
+
+What C++ features will be used:
+|- memory management with new/delete
+|- classes / STL containers / iostream for the cache
+|- iterators
+|- strings
+|- lambdas
+\- exception handling
