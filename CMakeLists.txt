@@ -18,7 +18,11 @@ add_executable(megahttp
   src/http_server.cpp
   src/megahttp_resource.cpp
   src/mega_client.cpp
+  src/get_public_node_listener.cpp
+  src/transfer_listener.cpp
   )
+set_property(TARGET megahttp PROPERTY CXX_STANDARD 11)
+set_property(TARGET megahttp PROPERTY CXX_STANDARD_REQIRED ON)
 target_link_libraries(megahttp
   ${LIBHTTPSERVER_LIBRARIES}
   ${LIBMEGA_LIBRARIES}
