@@ -22,34 +22,31 @@
 #include <iostream>
 
 using namespace httpserver;
+using namespace std;
 
 class hello_world_resource : public http_resource<hello_world_resource> {
-	public:
+    public:
         void render(const http_request&, http_response**);
-        void set_some_data(const std::string &s) {data = s;}
-        std::string data;
+        void set_some_data(const string &s) {data = s;}
+        string data;
 };
 
 //using the render method you are able to catch each type of request you receive
 void hello_world_resource::render(const http_request& req, http_response** res)
 {
-    //it is possible to store data inside the resource object that can be altered
-    //through the requests
-    std::cout << "Data was: " << data << std::endl;
-    std::string datapar = req.get_arg("data");
-    set_some_data(datapar == "" ? "no data passed!!!" : datapar);
-    std::cout << "Now data is:" << data << std::endl;
+    string file = req.get_arg("file");
+    cout << "file: " << file << endl;
 
     //it is possible to send a response initializing an http_string_response
     //that reads the content to send in response from a string.
-    *res = new http_response(http_response_builder("Hello World!!!", 200).string_response());
+    *res = new http_response(http_response_builder(file, 200).file_response());
 }
 
 int main()
 {
     //it is possible to create a webserver passing a great number of parameters.
     //In this case we are just passing the port and the number of thread running.
-	webserver ws = create_webserver(8080).max_threads(5);
+    webserver ws = create_webserver(8080).max_threads(5);
 
     hello_world_resource hwr;
     //this way we are registering the hello_world_resource to answer for the endpoint
@@ -62,5 +59,5 @@ int main()
     //a blocking call; if we want the call to be non-blocking we can just pass false to the
     //method.
     ws.start(true);
-	return 0;
+    return 0;
 }
