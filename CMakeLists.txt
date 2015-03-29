@@ -12,3 +12,14 @@ add_executable(cat-server src/cat-server.cpp)
 target_link_libraries(cat-server ${LIBHTTPSERVER_LIBRARIES})
 add_executable(mega-test src/mega-test.cpp)
 target_link_libraries(mega-test ${LIBMEGA_LIBRARIES})
+
+add_executable(megahttp
+  src/main.cpp
+  src/http_server.cpp
+  src/megahttp_resource.cpp
+  src/mega_client.cpp
+  )
+target_link_libraries(megahttp
+  ${LIBHTTPSERVER_LIBRARIES}
+  ${LIBMEGA_LIBRARIES}
+  )

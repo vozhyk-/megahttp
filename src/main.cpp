@@ -1,18 +1,11 @@
-#include <httpserver.hpp>
-#include "megahttp_resource.h"
+#include "mega_client.h"
+#include "http_server.h"
 
 using namespace std;
-using namespace httpserver;
-
-const int SERVER_PORT = 8080;
 
 int main()
 {
-    webserver server = create_webserver(SERVER_PORT).max_threads(5);
-
-    megahttp_resource resource;
-    server.register_resource("/", &resource, true);
-
-    server.start(true);
+    init_mega();
+    start_http_server();
     return 0;
 }
