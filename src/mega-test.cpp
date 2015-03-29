@@ -79,9 +79,9 @@ public:
 
                 delete list;
 
-                cout << "***** Uploading the image MEGA.png" << endl;
-                api->startUpload("MEGA.png", root);
                 delete root;
+
+                finished = true;
 
                 break;
             }
@@ -111,8 +111,6 @@ public:
         {
             cout << "***** Transfer finished OK" << endl;
         }
-
-        finished = true;
     }
     
     virtual void onTransferUpdate(MegaApi *api, MegaTransfer *transfer)
@@ -158,11 +156,9 @@ int main()
     //It is also possible to register a different listener per request/transfer
     megaApi->addListener(&listener);
 
-    if(!strcmp(MEGA_EMAIL, "EMAIL"))
+    if(!strcmp(MEGA_EMAIL, "email@example.com"))
     {
-        cout << "Please enter your email/password at the top of main.cpp" << endl;
-        cout << "Press any key to exit the app..." << endl;
-        getchar();
+        cout << "Please enter your email/password in mega-config.h" << endl;
         exit(0);
     }
 
@@ -174,8 +170,5 @@ int main()
     {
         sleep(1000);
     }
-    
-    cout << "Press any key to exit the app..." << endl;
-    getchar();
     return 0;
 }
