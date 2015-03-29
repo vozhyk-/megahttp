@@ -24,7 +24,7 @@
 using namespace httpserver;
 using namespace std;
 
-class hello_world_resource : public http_resource<hello_world_resource> {
+class cat_resource : public http_resource<cat_resource> {
     public:
         void render(const http_request&, http_response**);
         void set_some_data(const string &s) {data = s;}
@@ -32,7 +32,7 @@ class hello_world_resource : public http_resource<hello_world_resource> {
 };
 
 //using the render method you are able to catch each type of request you receive
-void hello_world_resource::render(const http_request& req, http_response** res)
+void cat_resource::render(const http_request& req, http_response** res)
 {
     string file = req.get_arg("file");
     cout << "file: " << file << endl;
@@ -48,12 +48,8 @@ int main()
     //In this case we are just passing the port and the number of thread running.
     webserver ws = create_webserver(8080).max_threads(5);
 
-    hello_world_resource hwr;
-    //this way we are registering the hello_world_resource to answer for the endpoint
-    //"/hello". The requested method is called (if the request is a GET we call the render_GET
-    //method. In case that the specific render method is not implemented, the generic "render"
-    //method is called.
-    ws.register_resource("/", &hwr, true);
+    cat_resource resource;
+    ws.register_resource("/", &resource, true);
 
     //This way we are putting the created webserver in listen. We pass true in order to have
     //a blocking call; if we want the call to be non-blocking we can just pass false to the
