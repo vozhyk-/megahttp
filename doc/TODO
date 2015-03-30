@@ -1,7 +1,8 @@
 error checking
-documentation
+document source
 support multiple files
 download files in chunks
 limit size of in-memory / file-based cache
 support multiple MEGA accounts
 enable MEGA cache
+add dependencies to 'doc' target
