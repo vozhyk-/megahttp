@@ -7,6 +7,7 @@ Building
 ```bash
 cmake .
 make
+make doc # If you want to generate documentation for the source with doxygen
 ```
 
 Usage
@@ -27,3 +28,5 @@ Dependencies
 * [CMake](http://www.cmake.org/) - build system
 * [libhttpserver](https://github.com/etr/libhttpserver) - HTTP server library
 * [MEGA SDK](https://github.com/meganz/sdk) - MEGA client library
+* [Doxygen](http://www.stack.nl/~dimitri/doxygen/) (optional) - tool for
+generating documentation
