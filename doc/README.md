@@ -23,6 +23,7 @@ where MEGA_URL is a public link to a file in MEGA (with the key built-in).
 
 Dependencies
 ------------
-[CMake](http://www.cmake.org/) - build system
-[libhttpserver](https://github.com/etr/libhttpserver) - HTTP server library
-[MEGA SDK](https://github.com/meganz/sdk) - MEGA client library
+
+* [CMake](http://www.cmake.org/) - build system
+* [libhttpserver](https://github.com/etr/libhttpserver) - HTTP server library
+* [MEGA SDK](https://github.com/meganz/sdk) - MEGA client library
