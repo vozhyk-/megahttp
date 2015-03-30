@@ -168,7 +168,7 @@ int main()
     //You can use the main thread to show a GUI or anything else. MegaApi runs in a background thread.
     while(!listener.finished)
     {
-        sleep(1000);
+        sleep(1);
     }
     return 0;
 }
