@@ -14,7 +14,7 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     // TODO use exceptions to handle errors
     // TODO don't download every time - make a cache (class)
-    string local_path = download_public_file_to_tmp(mega_url);
+    string local_path = file_cache->get_public_file(mega_url);
 
     *res = new http_response(http_response_builder(local_path, 200)
                              .file_response());
