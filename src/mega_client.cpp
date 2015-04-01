@@ -39,4 +39,6 @@ string download_public_file_to_tmp(string url)
     transfer_listener t_listener;
     mega_api->startDownload(node, local_path.c_str(), &t_listener);
     bool successful = t_listener.wait_for_result();
+
+    return local_path;
 }
