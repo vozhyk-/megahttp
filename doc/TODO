@@ -1,5 +1,6 @@
 error checking
 document source
+add license
 support multiple files
 download files in chunks
 limit size of in-memory / file-based cache
