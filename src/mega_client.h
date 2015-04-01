@@ -7,6 +7,7 @@ extern mega::MegaApi *mega_api;
 
 void init_mega();
 
-void download_public_file(std::string url, std::string local_path);
+mega::MegaNode *get_mega_public_node(std::string url)
+std::string download_public_file_to_tmp(std::string url);
 
 #endif // MEGA_CLIENT_H

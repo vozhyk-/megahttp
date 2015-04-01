@@ -19,12 +19,21 @@ void init_mega()
     mega_api->setLogLevel(MegaApi::LOG_LEVEL_INFO);
 }
 
-void download_public_file(string url, string local_path)
+MegaNode *get_mega_public_node(string url)
 {
-    /* Get the node from the URL */
-    get_public_node_listener r_listener;
-    mega_api->getPublicNode(url.c_str(), &r_listener);
-    MegaNode *node = r_listener.wait_for_result();
+    get_public_node_listener listener;
+
+    mega_api->getPublicNode(url.c_str(), &listener);
+    return listener.wait_for_result();
+}
+
+string download_public_file_to_tmp(string url)
+{
+    MegaNode *node = get_mega_public_node(url);
+
+    /* Create a path to download to */
+    // TODO make the filename look better
+    string local_path = "/tmp/" + to_string(node->getHandle());
 
     /* Download the file */
     transfer_listener t_listener;

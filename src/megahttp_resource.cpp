@@ -12,8 +12,9 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     cout << "url: " << mega_url << endl;
 
-    string local_path = "/tmp/test.mp3";
-    download_public_file(mega_url, local_path);
+    // TODO use exceptions to handle errors
+    // TODO don't download every time - make a cache (class)
+    string local_path = download_public_file_to_tmp(mega_url);
 
     *res = new http_response(http_response_builder(local_path, 200)
                              .file_response());
