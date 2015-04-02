@@ -4,23 +4,21 @@
 
 using namespace std;
 
-ssize_t response_cycle_callback(const string &buf)
+ssize_t response_cycle_callback(char *buf, size_t size)
 {
-    static bool first_time = true;
+    static int times = 0;
 
-    cout << "Callback called with buffer: [" << buf << "]" << endl;
+    cout << "Callback called " << times << "'th time"
+         << " with size = " << size << endl;
 
-    if (first_time)
-    {
-        const_cast<string &>(buf) = "5\r\ntest2\r\n";
-        first_time = false;
-
-        return sizeof("5\r\ntest2\r\n");
-    }
-    else
-    {
+    if (times >= 10)
         return -1;
-    }
+
+    memset(buf, 'A' + times, 128);
+    times++;
+    /* Wait some time so that we actually see that chunking is happening */
+    sleep(1);
+    return 128;
 }
 
 void chunked_test_resource::render_GET(const http_request &req,
