@@ -47,25 +47,6 @@
 
 #define PORTNUM 1081
 
-struct CBC
-{
-    char *buf;
-    size_t pos;
-    size_t size;
-};
-
-static size_t
-copyBuffer (void *ptr, size_t size, size_t nmemb, void *ctx)
-{
-    struct CBC *cbc = ctx;
-
-    if (cbc->pos + size * nmemb > cbc->size)
-        return 0;                   /* overflow */
-    memcpy (&cbc->buf[cbc->pos], ptr, size * nmemb);
-    cbc->pos += size * nmemb;
-    return size * nmemb;
-}
-
 /**
  * MHD content reader callback that returns
  * data in chunks.
@@ -75,13 +56,12 @@ crc (void *cls, uint64_t pos, char *buf, size_t max)
 {
     struct MHD_Response **responseptr = cls;
 
+    printf("Callback called with pos: %ld, max: %ld\n", pos, max);
+
     if (pos == 128 * 10)
-    {
-        //MHD_add_response_header (*responseptr, "Footer", "working");
-        return MHD_CONTENT_READER_END_OF_STREAM;
-    }
+         return MHD_CONTENT_READER_END_OF_STREAM;
     if (max < 128)
-        abort ();                   /* should not happen in this testcase... */
+        abort();                   /* should not happen in this testcase... */
     memset (buf, 'A' + (pos / 128), 128);
     /* Wait some time so that we actually see that chunking is happening */
     sleep(1);
@@ -123,7 +103,7 @@ ahc_echo (void *cls,
     if (responseptr == NULL)
         return MHD_NO;
     response = MHD_create_response_from_callback (MHD_SIZE_UNKNOWN,
-                                                  128,
+                                                  1024,
                                                   &crc, responseptr, &crcf);
     *responseptr = response;
     ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
@@ -134,12 +114,7 @@ ahc_echo (void *cls,
 int main(int argc, char *const *argv)
 {
     struct MHD_Daemon *d;
-    char buf[2048];
-    struct CBC cbc;
 
-    cbc.buf = buf;
-    cbc.size = 2048;
-    cbc.pos = 0;
     d = MHD_start_daemon(MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG,
                          PORTNUM, NULL, NULL, &ahc_echo, "GET",
                          MHD_OPTION_THREAD_POOL_SIZE, CPU_COUNT, MHD_OPTION_END);
