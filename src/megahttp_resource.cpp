@@ -5,6 +5,9 @@
 #include "mega_client.h"
 #include "get_public_node_listener.h"
 
+using namespace std;
+using namespace httpserver;
+
 void megahttp_resource::render_GET(const http_request &req, http_response **res)
 {
     string mega_url = req.get_arg("url");

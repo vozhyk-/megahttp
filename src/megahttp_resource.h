@@ -3,7 +3,6 @@
 
 #include <httpserver.hpp>
 
-using namespace std;
 using namespace httpserver;
 
 class megahttp_resource : public http_resource<megahttp_resource>
