@@ -2,10 +2,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${megahttp_BINARY_DIR}/bin)
 
 find_package(LibHttpServer)
 find_package(PkgConfig)
+pkg_check_modules(LIBMICROHTTPD libmicrohttpd REQUIRED)
 pkg_check_modules(LIBMEGA libmega REQUIRED)
 
 add_executable(cat-server cat-server.cpp)
 target_link_libraries(cat-server ${LIBHTTPSERVER_LIBRARIES})
+
+add_executable(mhd-chunked-test mhd-chunked-test.c)
+target_link_libraries(mhd-chunked-test ${LIBMICROHTTPD_LIBRARIES})
 
 add_executable(mega-test mega-test.cpp)
 target_link_libraries(mega-test ${LIBMEGA_LIBRARIES})
