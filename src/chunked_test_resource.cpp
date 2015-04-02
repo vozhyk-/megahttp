@@ -29,6 +29,5 @@ void chunked_test_resource::render_GET(const http_request &req,
     cout << "chunked_test_resource: GET called" << endl;
 
     *res = new http_response(http_response_builder("test")
-                             .with_header("Transfer-Encoding", "chunked")
                              .deferred_response(response_cycle_callback));
 }
