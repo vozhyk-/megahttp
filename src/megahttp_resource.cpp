@@ -16,17 +16,17 @@ class streaming_listener : public MegaTransferListener
 public:
     virtual void onTransferUpdate(MegaApi *api, MegaTransfer *transfer)
     {
-        // auto size = transfer->getDeltaSize();
-        // char *data = transfer->getLastBytes();
+        auto size = transfer->getDeltaSize();
+        char *data = transfer->getLastBytes();
 
-        // cout << "onTransferData: buf " << (long long)data
-        //      << " size " << size << endl;
+        cout << "onTransferData: buf " << (long long)data
+             << " size " << size << endl;
     }
 
     virtual void onTransferFinish(MegaApi *api, MegaTransfer *transfer,
                                   MegaError *err)
     {
-        // cout << "onTransferFinish: " << err << endl;
+        cout << "onTransferFinish: " << err << endl;
     }
 };
 
@@ -53,8 +53,8 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     // start node download
     // TODO look at HTTP request range !
-    streaming_listener listener;
-    mega_api->startStreaming(node, 0, size, &listener);
+    auto *listener = new streaming_listener();
+    mega_api->startStreaming(node, 0, size, listener);
 
     // associate http callback with http response
     *res = new http_response(http_response_builder("")
