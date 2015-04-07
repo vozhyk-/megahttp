@@ -33,6 +33,32 @@ public:
 
 thread_local shared_ptr<file_cache_item> cached;
 
+ssize_t response_callback(char *out_buf, size_t max_size)
+{
+    thread_local static size_t file_offset = 0;
+
+    char *data;
+    ssize_t to_copy = cached->get_chunk(file_offset, max_size, data);
+
+    cout << "HTTP data requested: file_offset " << file_offset
+         << ", max_size " << max_size
+         << ", to_copy " << to_copy
+         << ", data " << (void *)data
+         << endl;
+
+    if (to_copy > 0) // we got data
+    {
+        memcpy(out_buf, data, to_copy);
+        file_offset += to_copy;
+    }
+    else if (to_copy == 0)
+    {
+        this_thread::sleep_for(chrono::seconds(1));
+    }
+
+    return to_copy;
+};
+
 void megahttp_resource::render_GET(const http_request &req, http_response **res)
 {
     string mega_url = req.get_arg("url");
@@ -51,23 +77,10 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     // start node download
     // TODO look at HTTP request range !
-    cached = file_cache[node];
+    cached = file_cache[node]; // must set this for callback to work
     auto *listener = &cached->mega_transfer_listener;
 
     mega_api->startStreaming(node, 0, file_size, listener);
-
-    auto response_callback = [] (char *out_buf, size_t size) -> ssize_t
-    {
-        thread_local static size_t file_offset = 0;
-
-        char *data;
-        size_t to_copy = cached->get_chunk(file_offset, data);
-
-        if (to_copy > 0)
-            memcpy(out_buf, data, to_copy);
-
-        return to_copy;
-    };
 
     // associate http callback with http response
     *res = new http_response(http_response_builder("")

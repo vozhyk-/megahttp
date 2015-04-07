@@ -17,12 +17,14 @@ void file_cache_item::append_data(char *data, size_t size)
  *    0, if the chunk is not downloaded yet,
  *   -1, if the chunk is past the end of file,
  *   -2, if the chunk couldn't be downloaded because of an error
- * Sets result to address of chunk if return value > 0
+ * Sets result to address of chunk, or NULL if return value <= 0
  */
-size_t file_cache_item::get_chunk(size_t start, char *&result)
+ssize_t file_cache_item::get_chunk(size_t start, size_t max_size, char *&result)
 {
     if (start >= buffer.size())
     {
+        result = NULL;
+
         if (start >= full_size)
         {
             // end-of-stream
@@ -42,5 +44,5 @@ size_t file_cache_item::get_chunk(size_t start, char *&result)
 
     result = buffer.data() + start;
 
-    return buffer.size() - start;
+    return min(max_size, buffer.size() - start);
 }

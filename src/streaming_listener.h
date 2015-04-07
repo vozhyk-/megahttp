@@ -14,6 +14,7 @@ public:
 
     file_cache_item &cache_item;
 
+    virtual void onTransferStart(MegaApi *, MegaTransfer *);
     virtual void onTransferUpdate(MegaApi *, MegaTransfer *);
     virtual void onTransferFinish(MegaApi *, MegaTransfer *, MegaError *);
 };

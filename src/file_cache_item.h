@@ -20,7 +20,7 @@ public:
     streaming_listener mega_transfer_listener;
 
     void append_data(char *data, size_t size);
-    size_t get_chunk(size_t start, char *&result);
+    ssize_t get_chunk(size_t start, size_t max_size, char *&result);
 };
 
 #endif // FILE_CACHE_ITEM_H
