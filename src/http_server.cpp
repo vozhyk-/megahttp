@@ -10,7 +10,8 @@ using namespace httpserver;
 
 void start_http_server()
 {
-    webserver server = create_webserver(server_port).max_threads(5);
+    webserver server =
+        create_webserver(server_port).max_threads(server_max_threads);
 
     megahttp_resource resource;
     chunked_test_resource ct_resource;
