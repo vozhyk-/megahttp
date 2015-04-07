@@ -1,7 +1,7 @@
 #ifndef HTTP_SERVER_H
 #define HTTP_SERVER_H
 
-const int SERVER_PORT = 8080;
+#include "config.h"
 
 void start_http_server();
 
