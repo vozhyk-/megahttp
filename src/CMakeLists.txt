@@ -21,7 +21,9 @@ add_executable(megahttp
   chunked_test_resource.cpp
   mega_client.cpp
   get_public_node_listener.cpp
-  transfer_listener.cpp
+  file_cache.cpp
+  file_cache_item.cpp
+  streaming_listener.cpp
   )
 set_property(TARGET megahttp PROPERTY CXX_STANDARD 11)
 set_property(TARGET megahttp PROPERTY CXX_STANDARD_REQIRED ON)

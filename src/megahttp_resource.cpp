@@ -4,6 +4,7 @@
 
 #include "mega_client.h"
 #include "get_public_node_listener.h"
+#include "file_cache.h"
 
 using namespace std;
 using namespace httpserver;
@@ -11,29 +12,26 @@ using namespace mega;
 
 #define END_OF_STREAM -1;
 
-class streaming_listener : public MegaTransferListener
+/*
+ * file_cache
+ *  \- file_cache_item
+ *      \- streaming_listener
+ *
+ * cache[file].mega_transfer_listener
+ */
+
+/*
+class request
 {
 public:
-    virtual void onTransferUpdate(MegaApi *api, MegaTransfer *transfer)
-    {
-        auto size = transfer->getDeltaSize();
-        char *data = transfer->getLastBytes();
+    cache_item *cached;
+    size_t file_offset;
 
-        cout << "onTransferData: buf " << (long long)data
-             << " size " << size << endl;
-    }
-
-    virtual void onTransferFinish(MegaApi *api, MegaTransfer *transfer,
-                                  MegaError *err)
-    {
-        cout << "onTransferFinish: " << err << endl;
-    }
+    cycle_callback_ptr http_data_callback;
 };
+*/
 
-ssize_t response_callback(char *buf, size_t size)
-{
-    return -1;
-}
+thread_local shared_ptr<file_cache_item> cached;
 
 void megahttp_resource::render_GET(const http_request &req, http_response **res)
 {
@@ -47,14 +45,29 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     // get node
     MegaNode *node = get_mega_public_node(mega_url);
-    auto size = node->getSize();
+    auto file_size = node->getSize();
 
-    cout << "node size: " << size << endl;
+    cout << "node size: " << file_size << endl;
 
     // start node download
     // TODO look at HTTP request range !
-    auto *listener = new streaming_listener();
-    mega_api->startStreaming(node, 0, size, listener);
+    cached = file_cache[node];
+    auto *listener = &cached->mega_transfer_listener;
+
+    mega_api->startStreaming(node, 0, file_size, listener);
+
+    auto response_callback = [] (char *out_buf, size_t size) -> ssize_t
+    {
+        thread_local static size_t file_offset = 0;
+
+        char *data;
+        size_t to_copy = cached->get_chunk(file_offset, data);
+
+        if (to_copy > 0)
+            memcpy(out_buf, data, to_copy);
+
+        return to_copy;
+    };
 
     // associate http callback with http response
     *res = new http_response(http_response_builder("")
