@@ -24,7 +24,7 @@ where MEGA_URL is a public link to a file in MEGA (with the key built-in).
 
 Configuration
 -------------
-See `config.h`
+See `src/config.h`
 
 Dependencies
 ------------
