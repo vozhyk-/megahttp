@@ -27,6 +27,7 @@ void streaming_listener::onTransferUpdate(MegaApi *api,
 
     cout << "Downloaded data: size " << size
          << ", new buffer size: " << cache_item.buffer.size()
+         << ", filename ``" << cache_item.node->getName() << "''"
          << endl;
 }
 

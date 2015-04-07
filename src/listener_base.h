@@ -1,10 +1,9 @@
 #ifndef LISTENER_BASE_H
 #define LISTENER_BASE_H
 
-#include <thread>
-#include <chrono>
+#include "config.h"
 
-const auto mega_request_sleep = std::chrono::milliseconds(200);
+#include <thread>
 
 template<typename result_type> class listener_base
 {

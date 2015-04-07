@@ -1,16 +1,17 @@
 #include "megahttp_resource.h"
 
+#include "config.h"
+
 #include <iostream>
+#include <memory>
+#include <thread>
 
 #include "mega_client.h"
-#include "get_public_node_listener.h"
 #include "file_cache.h"
 
 using namespace std;
 using namespace httpserver;
 using namespace mega;
-
-#define END_OF_STREAM -1;
 
 /*
  * file_cache
@@ -44,6 +45,7 @@ ssize_t response_callback(char *out_buf, size_t max_size)
          << ", max_size " << max_size
          << ", to_copy " << to_copy
          << ", data " << (void *)data
+         << ", filename ``" << cached->node->getName() << "''"
          << endl;
 
     if (to_copy > 0) // we got data
@@ -53,7 +55,7 @@ ssize_t response_callback(char *out_buf, size_t max_size)
     }
     else if (to_copy == 0)
     {
-        this_thread::sleep_for(chrono::milliseconds(200));
+        this_thread::sleep_for(http_response_sleep);
     }
 
     return to_copy;
@@ -66,13 +68,19 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     cout << "url: " << mega_url << endl;
 
+    cout << "==== Headers:" << endl;
+
+    map<string, string, header_comparator> headers;
+    req.get_headers(headers);
+    for (auto i : headers)
+        cout << i.first << ": " << i.second << endl;
+
     // TODO use exceptions to handle errors
 
     // get node
     shared_ptr<MegaNode> node(get_mega_public_node(mega_url));
-    auto file_size = node->getSize();
 
-    cout << "file size: " << file_size << endl;
+    cout << "file size: " << node->getSize() << endl;
 
     /* start node download */
     cached = file_cache[node]; // must set this for callback to work
