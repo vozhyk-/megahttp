@@ -22,6 +22,10 @@ http://localhost:8080/?url=MEGA_URL
 ```
 where MEGA_URL is a public link to a file in MEGA (with the key built-in).
 
+Configuration
+-------------
+See `config.h`
+
 Dependencies
 ------------
 
