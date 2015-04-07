@@ -1,9 +1,23 @@
 #include "file_cache_item.h"
 
-file_cache_item::file_cache_item(size_t full_size)
-    : full_size(full_size), downloading(true), mega_transfer_listener(*this)
+#include "mega_client.h"
+
+file_cache_item::file_cache_item(shared_ptr<MegaNode> node)
+    : node(node), full_size(node->getSize()),
+      downloading(false), mega_transfer_listener(*this)
 {
     buffer.reserve(full_size);
+}
+
+void file_cache_item::start_download()
+{
+    start_download(0, full_size);
+}
+
+void file_cache_item::start_download(size_t start, size_t size)
+{
+    mega_api->startStreaming(node.get(), start, size, &mega_transfer_listener);
+    downloading = true;
 }
 
 void file_cache_item::append_data(char *data, size_t size)
@@ -30,15 +44,12 @@ ssize_t file_cache_item::get_chunk(size_t start, size_t max_size, char *&result)
             // end-of-stream
             return -1;
         }
-        else if (downloading)
+        else
         {
             // not downloaded yet
+            if (!downloading)
+                start_download();
             return 0;
-        }
-        else // not downloading && chunk inside file
-        {
-            // error
-            return -2;
         }
     }
 

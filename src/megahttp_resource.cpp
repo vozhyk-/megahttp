@@ -53,7 +53,7 @@ ssize_t response_callback(char *out_buf, size_t max_size)
     }
     else if (to_copy == 0)
     {
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::milliseconds(200));
     }
 
     return to_copy;
@@ -67,20 +67,17 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     cout << "url: " << mega_url << endl;
 
     // TODO use exceptions to handle errors
-    // TODO don't download every time - make a cache (class)
 
     // get node
-    MegaNode *node = get_mega_public_node(mega_url);
+    shared_ptr<MegaNode> node(get_mega_public_node(mega_url));
     auto file_size = node->getSize();
 
-    cout << "node size: " << file_size << endl;
+    cout << "file size: " << file_size << endl;
 
-    // start node download
-    // TODO look at HTTP request range !
+    /* start node download */
     cached = file_cache[node]; // must set this for callback to work
-    auto *listener = &cached->mega_transfer_listener;
 
-    mega_api->startStreaming(node, 0, file_size, listener);
+    // TODO look at HTTP request range !
 
     // associate http callback with http response
     *res = new http_response(http_response_builder("")

@@ -16,7 +16,7 @@ class file_cache
     unordered_map<MegaHandle, value_type> items;
 
 public:
-    value_type &operator[](MegaNode *);
+    value_type &operator[](shared_ptr<MegaNode>);
 };
 
 extern file_cache file_cache;
