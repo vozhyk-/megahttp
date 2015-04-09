@@ -31,7 +31,7 @@ Dependencies
 ------------
 
 * [CMake](http://www.cmake.org/) - build system
-* [libhttpserver](https://github.com/vozhyk-/libhttpserver) - HTTP server library
+* [libhttpserver](https://github.com/etr/libhttpserver) - HTTP server library
 * [MEGA SDK](https://github.com/meganz/sdk) - MEGA client library
 * [Doxygen](http://www.stack.nl/~dimitri/doxygen/) (optional) - tool for
 generating documentation
