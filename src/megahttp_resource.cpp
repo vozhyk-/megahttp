@@ -33,11 +33,11 @@ public:
 */
 
 thread_local shared_ptr<file_cache_item> cached;
+thread_local size_t file_offset;
+
 
 ssize_t response_callback(char *out_buf, size_t max_size)
 {
-    thread_local static size_t file_offset = 0;
-
     char *data;
     ssize_t to_copy = cached->get_chunk(file_offset, max_size, data);
 
@@ -83,7 +83,9 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     cout << "file size: " << node->getSize() << endl;
 
     /* start node download */
-    cached = file_cache[node]; // must set this for callback to work
+    /* must set these for callback to work */
+    file_offset = 0;
+    cached = file_cache[node];
 
     // TODO look at HTTP request range !
 
