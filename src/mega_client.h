@@ -1,9 +1,10 @@
 #ifndef MEGA_CLIENT_H
 #define MEGA_CLIENT_H
 
+#include <memory>
 #include <megaapi.h>
 
-extern mega::MegaApi *mega_api;
+extern std::unique_ptr<mega::MegaApi> mega_api;
 
 void init_mega();
 

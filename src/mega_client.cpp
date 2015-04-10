@@ -8,12 +8,12 @@ using namespace mega;
 
 const char *APP_KEY = "HUc2iQaJ";
 
-MegaApi *mega_api;
+unique_ptr<MegaApi> mega_api;
 
 void init_mega()
 {
     // TODO investigate enabling local caching
-    mega_api = new MegaApi(APP_KEY);
+    mega_api = unique_ptr<MegaApi>(new MegaApi(APP_KEY));
 
     mega_api->setLogLevel(MegaApi::LOG_LEVEL_INFO);
 }
