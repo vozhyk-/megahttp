@@ -11,7 +11,6 @@ add_executable(megahttp
   main.cpp
   http_server.cpp
   megahttp_resource.cpp
-  chunked_test_resource.cpp
   mega_client.cpp
   get_public_node_listener.cpp
   file_cache.cpp
