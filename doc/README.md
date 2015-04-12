@@ -23,9 +23,11 @@ http://localhost:8080/?url=MEGA_URL
 ```
 where MEGA_URL is a public link to a file in MEGA (with the key built-in).
 
+Logs are written to `megahttp.log` in the current directory by default.
+
 Configuration
 -------------
-See `src/config.h`
+See `src/config.c`
 
 Dependencies
 ------------

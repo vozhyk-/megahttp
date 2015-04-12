@@ -2,11 +2,17 @@
 #define CONFIG_H
 
 #include <chrono>
+#include <string>
 
-const int server_port = 8080;
-const int server_max_threads = 2;
+#include "logging.h"
 
-const auto mega_request_sleep = std::chrono::milliseconds(200);
-const auto http_response_sleep = std::chrono::milliseconds(200);
+extern const int server_port;
+extern const int server_max_threads;
 
-#endif /* CONFIG_H */
+extern const std::string log_file;
+extern logging::logger::logged_types_map logged_types;
+
+extern const std::chrono::milliseconds mega_request_sleep;
+extern const std::chrono::milliseconds http_response_sleep;
+
+#endif // CONFIG_H

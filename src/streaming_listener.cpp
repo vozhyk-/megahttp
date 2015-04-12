@@ -2,9 +2,11 @@
 
 #include <iostream>
 
+#include "logging.h"
 #include "file_cache_item.h"
 
 using namespace std;
+using namespace logging;
 
 streaming_listener::streaming_listener(file_cache_item &cache_item)
     : cache_item(cache_item)
@@ -14,7 +16,8 @@ streaming_listener::streaming_listener(file_cache_item &cache_item)
 void streaming_listener::onTransferStart(MegaApi *api,
                                          MegaTransfer *transfer)
 {
-    cout << "Download starting" << endl;
+    logger.log(msg_type::download_status)
+        << "starting" << endl;
 }
 
 void streaming_listener::onTransferUpdate(MegaApi *api,
@@ -25,10 +28,11 @@ void streaming_listener::onTransferUpdate(MegaApi *api,
 
     cache_item.append_data(data, size);
 
-    cout << "Downloaded data: size " << size
-         << ", new buffer size: " << cache_item.buffer.size()
-         << ", filename ``" << cache_item.node->getName() << "''"
-         << endl;
+    logger.log(msg_type::download_data)
+        << "size " << size
+        << ", new buffer size: " << cache_item.buffer.size()
+        << ", node " << cache_item.node->getBase64Handle()
+        << endl;
 }
 
 void streaming_listener::onTransferFinish(MegaApi *api,
@@ -38,5 +42,6 @@ void streaming_listener::onTransferFinish(MegaApi *api,
     // TODO look at err
     cache_item.downloading = false;
 
-    cout << "Download finished with " << err->getErrorString() << endl;
+    logger.log(msg_type::download_status)
+        << "finished with " << err->getErrorString() << "." << endl;
 }

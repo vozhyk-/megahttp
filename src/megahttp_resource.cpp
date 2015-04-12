@@ -6,6 +6,7 @@
 #include <memory>
 #include <thread>
 
+#include "logging.h"
 #include "mega_client.h"
 #include "file_cache.h"
 
@@ -13,24 +14,8 @@ using namespace std;
 using namespace httpserver;
 using namespace mega;
 
-/*
- * file_cache
- *  \- file_cache_item
- *      \- streaming_listener
- *
- * cache[file].mega_transfer_listener
- */
+using namespace logging;
 
-/*
-class request
-{
-public:
-    cache_item *cached;
-    size_t file_offset;
-
-    cycle_callback_ptr http_data_callback;
-};
-*/
 
 class response_callback : public data_callback
 {
@@ -48,12 +33,13 @@ public:
         char *data;
         ssize_t to_copy = cached->get_chunk(file_offset, max_size, data);
 
-        cout << "HTTP data requested: file_offset " << file_offset
-             << ", max_size " << max_size
-             << ", to_copy " << to_copy
-             << ", data " << (void *)data
-             << ", filename ``" << cached->node->getName() << "''"
-             << endl;
+        logger.log(msg_type::response_data)
+            << "file_offset " << file_offset
+            << ", max_size " << max_size
+            << ", to_copy " << to_copy
+            << ", data " << (void *)data
+            << ", node " << cached->node->getBase64Handle()
+            << endl;
 
         if (to_copy > 0) // we got data
         {
@@ -76,21 +62,33 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     string mega_url = req.get_arg("url");
     // TODO check mega_url
 
-    cout << "url: " << mega_url << endl;
+    const auto t = msg_type::request_info;
+    if (logger.will_log(t))
+    {
+        logger.log(t) << "url: " << mega_url << endl;
 
-    cout << "==== Headers:" << endl;
+        logger.log(t) << "==== Headers:" << endl;
 
-    map<string, string, header_comparator> headers;
-    req.get_headers(headers);
-    for (auto i : headers)
-        cout << i.first << ": " << i.second << endl;
+        map<string, string, header_comparator> headers;
+        req.get_headers(headers);
+        for (auto i : headers)
+            logger.log(t) << i.first << ": " << i.second << endl;
+    }
 
     // TODO use exceptions to handle errors
 
     // get node
     shared_ptr<MegaNode> node(get_mega_public_node(mega_url));
 
-    cout << "file size: " << node->getSize() << endl;
+    logger.log(msg_type::file_info)
+        << "node handle: " << node->getBase64Handle()
+        << endl;
+    logger.log(msg_type::file_info)
+        << "file name: " << node->getName()
+        << endl;
+    logger.log(msg_type::file_info)
+        << "file size: " << node->getSize()
+        << endl;
 
     // TODO look at HTTP request range !
     auto *cb = new response_callback(node);
