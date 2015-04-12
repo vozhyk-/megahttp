@@ -12,6 +12,8 @@ logger::logged_types_map logged_types
 {
     // variables from HTTP request
     { msg_type::request_info, true },
+    // error HTTP server returns to client
+    { msg_type::response_error, true },
     // info about requested files
     { msg_type::file_info, true },
     // download start/finish, error

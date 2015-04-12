@@ -12,6 +12,7 @@ namespace logging
     map<msg_type, string> type_description
     {
         { msg_type::request_info, "request" },
+        { msg_type::response_error, "response error" },
         { msg_type::file_info, "file info" },
         { msg_type::response_data, "response data" },
         { msg_type::download_status, "download" },

@@ -24,10 +24,13 @@ string node_id(shared_ptr<MegaNode> node)
     return "(" + string(node->getBase64Handle()) + ") ";
 }
 
-MegaNode *get_mega_public_node(string url)
+shared_ptr<MegaError> get_mega_public_node(string url,
+                                           shared_ptr<MegaNode> &result)
 {
     get_public_node_listener listener;
 
     mega_api->getPublicNode(url.c_str(), &listener);
-    return listener.wait_for_result();
+    result = listener.wait_for_result();
+
+    return listener.error;
 }

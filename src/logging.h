@@ -12,6 +12,7 @@ namespace logging
     enum class msg_type
     {
         request_info,
+        response_error,
         file_info,
         response_data,
         download_status,

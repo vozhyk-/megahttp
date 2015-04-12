@@ -10,7 +10,9 @@ void init_mega();
 
 std::string node_id(std::shared_ptr<mega::MegaNode> node);
 
-mega::MegaNode *get_mega_public_node(std::string url);
+std::shared_ptr<mega::MegaError> get_mega_public_node(
+    std::string url,
+    std::shared_ptr<mega::MegaNode> &result);
 std::string download_public_file_to_tmp(std::string url);
 
 #endif // MEGA_CLIENT_H

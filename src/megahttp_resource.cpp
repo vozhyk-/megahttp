@@ -7,6 +7,8 @@
 #include <thread>
 
 #include "logging.h"
+#include "text.h"
+#include "http_server.h"
 #include "mega_client.h"
 #include "file_cache.h"
 
@@ -79,20 +81,40 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     // TODO use exceptions to handle errors
 
     // get node
-    shared_ptr<MegaNode> node(get_mega_public_node(mega_url));
+    shared_ptr<MegaNode> node;
+    auto error = get_mega_public_node(mega_url, node);
 
-    string id = node_id(node);
-    logger.log(msg_type::file_info)
-        << id << "file name: " << node->getName()
-        << endl;
-    logger.log(msg_type::file_info)
-        << id << "file size: " << node->getSize()
-        << endl;
+    switch (error->getErrorCode())
+    {
+    case MegaError::API_OK:
+    {
+        string id = node_id(node);
+        logger.log(msg_type::file_info)
+            << id << "file name: " << node->getName()
+            << endl;
+        logger.log(msg_type::file_info)
+            << id << "file size: " << node->getSize()
+            << endl;
 
-    // TODO look at HTTP request range !
-    auto *cb = new response_callback(node);
+        // TODO look at HTTP request range !
+        auto *cb = new response_callback(node);
 
-    // associate http callback with http response
-    *res = new http_response(http_response_builder("")
-                             .deferred_response(cb));
+        // associate http callback with http response
+        *res = new http_response(http_response_builder("")
+                                 .deferred_response(cb));
+        return;
+    }
+    default:
+    {
+        string text =
+            response_msg::get_node_fail + error->getErrorString();
+        logger.log(msg_type::response_error)
+            << text << endl;
+
+        *res = new http_response(
+            http_response_builder(text + '\n',
+                                  status_code::internal_server_error)
+            .string_response());
+    }
+    }
 }
