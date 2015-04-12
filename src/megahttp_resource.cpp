@@ -21,10 +21,11 @@ class response_callback : public data_callback
 {
     shared_ptr<file_cache_item> cached;
     size_t file_offset;
+    string id;
 
 public:
     response_callback(shared_ptr<MegaNode> node)
-        : cached{file_cache[node]}, file_offset{0}
+        : cached{file_cache[node]}, file_offset{0}, id{node_id(node)}
     {
     }
 
@@ -34,11 +35,11 @@ public:
         ssize_t to_copy = cached->get_chunk(file_offset, max_size, data);
 
         logger.log(msg_type::response_data)
+            << id
             << "file_offset " << file_offset
             << ", max_size " << max_size
             << ", to_copy " << to_copy
             << ", data " << (void *)data
-            << ", node " << cached->node->getBase64Handle()
             << endl;
 
         if (to_copy > 0) // we got data
@@ -80,14 +81,12 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     // get node
     shared_ptr<MegaNode> node(get_mega_public_node(mega_url));
 
+    string id = node_id(node);
     logger.log(msg_type::file_info)
-        << "node handle: " << node->getBase64Handle()
+        << id << "file name: " << node->getName()
         << endl;
     logger.log(msg_type::file_info)
-        << "file name: " << node->getName()
-        << endl;
-    logger.log(msg_type::file_info)
-        << "file size: " << node->getSize()
+        << id << "file size: " << node->getSize()
         << endl;
 
     // TODO look at HTTP request range !

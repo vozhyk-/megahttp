@@ -9,10 +9,12 @@ class file_cache_item;
 
 class streaming_listener : public MegaTransferListener
 {
+    file_cache_item &cache_item;
+
+    std::string id;
+
 public:
     streaming_listener(file_cache_item &cache_item);
-
-    file_cache_item &cache_item;
 
     virtual void onTransferStart(MegaApi *, MegaTransfer *);
     virtual void onTransferUpdate(MegaApi *, MegaTransfer *);

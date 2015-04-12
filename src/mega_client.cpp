@@ -18,6 +18,12 @@ void init_mega()
     mega_api->setLogLevel(MegaApi::LOG_LEVEL_INFO);
 }
 
+// @return string for identifying a node in log output
+string node_id(shared_ptr<MegaNode> node)
+{
+    return "(" + string(node->getBase64Handle()) + ") ";
+}
+
 MegaNode *get_mega_public_node(string url)
 {
     get_public_node_listener listener;
