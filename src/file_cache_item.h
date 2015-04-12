@@ -5,13 +5,12 @@
 
 #include "streaming_listener.h"
 
-using namespace std;
 
 class file_cache_item
 {
     friend class streaming_listener;
 
-    vector<char> buffer;
+    std::vector<char> buffer;
 
     streaming_listener mega_transfer_listener;
 
@@ -19,12 +18,12 @@ class file_cache_item
     void start_download(size_t start, size_t size);
 
 public:
-    file_cache_item(shared_ptr<MegaNode> node);
+    file_cache_item(std::shared_ptr<mega::MegaNode> node);
 
     // we don't want us to be copied
     file_cache_item &operator=(file_cache_item &&) = default;
 
-    shared_ptr<MegaNode> node;
+    std::shared_ptr<mega::MegaNode> node;
     size_t full_size;
     bool downloading;
 

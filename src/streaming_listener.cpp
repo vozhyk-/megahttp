@@ -7,6 +7,7 @@
 #include "file_cache_item.h"
 
 using namespace std;
+using namespace mega;
 using namespace logging;
 
 streaming_listener::streaming_listener(file_cache_item &cache_item)

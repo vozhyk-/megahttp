@@ -2,6 +2,9 @@
 
 #include "mega_client.h"
 
+using namespace std;
+using namespace mega;
+
 file_cache_item::file_cache_item(shared_ptr<MegaNode> node)
     : node(node), full_size(node->getSize()),
       downloading(false), mega_transfer_listener(*this)

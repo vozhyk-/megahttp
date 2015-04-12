@@ -3,11 +3,10 @@
 
 #include <megaapi.h>
 
-using namespace mega;
 
 class file_cache_item;
 
-class streaming_listener : public MegaTransferListener
+class streaming_listener : public mega::MegaTransferListener
 {
     file_cache_item &cache_item;
 
@@ -16,9 +15,11 @@ class streaming_listener : public MegaTransferListener
 public:
     streaming_listener(file_cache_item &cache_item);
 
-    virtual void onTransferStart(MegaApi *, MegaTransfer *);
-    virtual void onTransferUpdate(MegaApi *, MegaTransfer *);
-    virtual void onTransferFinish(MegaApi *, MegaTransfer *, MegaError *);
+    virtual void onTransferStart(mega::MegaApi *, mega::MegaTransfer *);
+    virtual void onTransferUpdate(mega::MegaApi *, mega::MegaTransfer *);
+    virtual void onTransferFinish(mega::MegaApi *,
+                                  mega::MegaTransfer *,
+                                  mega::MegaError *);
 };
 
 #endif // STREAMING_LISTENER_H

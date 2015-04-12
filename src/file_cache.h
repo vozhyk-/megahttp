@@ -7,16 +7,14 @@
 
 #include "file_cache_item.h"
 
-using namespace std;
-using namespace mega;
 
 class file_cache
 {
-    using value_type = shared_ptr<file_cache_item>;
-    unordered_map<MegaHandle, value_type> items;
+    using item_type = std::shared_ptr<file_cache_item>;
+    std::unordered_map<mega::MegaHandle, item_type> items;
 
 public:
-    value_type &operator[](shared_ptr<MegaNode>);
+    item_type &operator[](std::shared_ptr<mega::MegaNode>);
 };
 
 extern file_cache file_cache;

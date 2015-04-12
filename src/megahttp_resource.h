@@ -3,12 +3,13 @@
 
 #include <httpserver.hpp>
 
-using namespace httpserver;
 
-class megahttp_resource : public http_resource<megahttp_resource>
+class megahttp_resource
+    : public httpserver::http_resource<megahttp_resource>
 {
 public:
-    void render_GET(const http_request &, http_response **);
+    void render_GET(const httpserver::http_request &,
+                    httpserver::http_response **);
 };
 
 #endif // MEGAHTTP_RESORUCE_H
