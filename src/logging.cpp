@@ -43,7 +43,7 @@ namespace logging
 
     bool logger::will_log(msg_type type)
     {
-        return (*logged)[type];
+        return logged[type];
     }
 
     ostream &operator<<(ostream &out, msg_type type)
@@ -51,7 +51,7 @@ namespace logging
         return out << type_description[type];
     }
 
-    class logger logger(&logged_types);
+    class logger logger(logged_types);
 
     void init_logging()
     {

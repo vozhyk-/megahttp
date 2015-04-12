@@ -25,14 +25,14 @@ namespace logging
     public:
         using logged_types_map = std::map<msg_type, bool>;
 
-        logger(logged_types_map *logged_types) : logged(logged_types) {}
+        logger(logged_types_map &logged_types) : logged(logged_types) {}
 
         std::ostream &log(msg_type type);
         bool will_log(msg_type type);
     private:
         null_ostream null_stream;
 
-        logged_types_map *logged;
+        logged_types_map &logged;
     };
 
 
