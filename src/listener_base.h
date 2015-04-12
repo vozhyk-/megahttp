@@ -8,6 +8,7 @@
 template<typename result_type> class listener_base
 {
 public:
+    /* done and result can be set from outside. Make private? */
     bool done;
     result_type result;
 

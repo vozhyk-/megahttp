@@ -22,16 +22,17 @@ namespace logging
 
     class logger : public std::ofstream
     {
-        null_ostream null_stream;
     public:
         using logged_types_map = std::map<msg_type, bool>;
 
         logger(logged_types_map *logged_types) : logged(logged_types) {}
 
-        logged_types_map *logged;
-
         std::ostream &log(msg_type type);
         bool will_log(msg_type type);
+    private:
+        null_ostream null_stream;
+
+        logged_types_map *logged;
     };
 
 
