@@ -30,8 +30,8 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
 
     // Check mega_url
     if (mega_url.empty())
-        return make_error_response(response_msg::empty_url,
-                                   status_code::bad_request);
+        return make_msg_response(response_msg::empty_url,
+                                 status_code::bad_request);
     // TODO Further check mega_url — correctness of format, presence of key
 
     // Get node
@@ -59,11 +59,11 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
     }
 
     case MegaError::API_ENOENT: // Not found
-        return make_error_response(response_msg::node_not_found,
-                                   status_code::not_found);
+        return make_msg_response(response_msg::node_not_found,
+                                 status_code::not_found);
 
     default:
-        return make_error_response(
+        return make_msg_response(
             response_msg::failed_to_get_node + error->getErrorString() + ".",
             status_code::internal_server_error);
     }

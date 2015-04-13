@@ -29,35 +29,53 @@ http_response *login_resource::make_GET_response(const http_request &req)
     // Check path
     if (path.size() < 2) // No email specified
     {
-        return make_error_response(response_msg::path_email_not_specified,
-                                   status_code::bad_request);
+        return make_msg_response(response_msg::path_email_not_specified,
+                                 status_code::bad_request);
     }
 
     string username = path.back();
-    string password = req.get_pass();
 
-    // Check password presence
-    if (password.empty())
+    // Check if user already logged in
+    if (mega_accounts[username])
     {
-        // TODO log
-        return new http_response(
-            http_response_builder("Log in with MEGA email and password.")
-            .basic_auth_fail_response("MEGA account"));
+        return make_msg_response(response_msg::already_logged_in,
+                                 status_code::ok);
     }
+    else
+    {
+        string password = req.get_pass();
 
-    try
-    {
-        add_account(username, password);
-    }
-    catch (const mega_account::other_login_error &e)
-    {
-        return make_error_response(
-            response_msg::mega_login_failed + e.error->getErrorString() + ".",
-            status_code::internal_server_error);
-    }
+        // Check password presence
+        if (password.empty())
+        {
+            // TODO log
+            return new http_response(
+                http_response_builder(response_msg::log_in)
+                .basic_auth_fail_response(username));
+        }
 
-    return make_error_response("Not implemented.",
-                               status_code::not_implemented);
+        // Try to log in
+        try
+        {
+            add_account(username, password);
+        }
+        catch (mega_account::invalid_credentials)
+        {
+            return new http_response(
+                http_response_builder(response_msg::invalid_credentials)
+                .basic_auth_fail_response(username));
+        }
+        catch (const mega_account::other_login_error &e)
+        {
+            return make_msg_response(
+                response_msg::mega_login_failed + e.error->getErrorString() + ".",
+                status_code::internal_server_error);
+        }
+
+        return make_msg_response(
+            response_msg::mega_login_successful,
+            status_code::ok);
+    }
 }
 
 void login_resource::render_GET(const http_request &req, http_response **res)

@@ -11,7 +11,8 @@
 extern const char *app_key;
 
 extern std::unique_ptr<mega::MegaApi> mega_api;
-extern std::unordered_map<std::string, mega_account> mega_accounts;
+extern std::unordered_map<std::string, std::shared_ptr<mega_account>>
+    mega_accounts;
 
 
 void init_mega();

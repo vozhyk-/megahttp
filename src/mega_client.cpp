@@ -11,7 +11,7 @@ using namespace mega;
 const char *app_key = "HUc2iQaJ";
 
 unique_ptr<MegaApi> mega_api;
-unordered_map<string, mega_account> mega_accounts;
+unordered_map<string, shared_ptr<mega_account>> mega_accounts;
 
 class mega_logger mega_logger{&logging::logger};
 
@@ -26,8 +26,8 @@ void init_mega()
 
 void add_account(const string &username, const string &password)
 {
-    mega_accounts.emplace(
-        make_pair(username, mega_account{username, password}));
+    mega_accounts[username] =
+        shared_ptr<mega_account>(new mega_account{username, password});
 }
 
 // @return string for identifying a node in log output

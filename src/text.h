@@ -13,6 +13,10 @@ namespace response_msg
 
     extern str path_email_not_specified;
 
+    extern str log_in;
+    extern str mega_login_successful;
+    extern str already_logged_in;
+    extern str invalid_credentials;
     extern str mega_login_failed;
 }
 

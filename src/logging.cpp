@@ -15,7 +15,7 @@ namespace logging
         { msg_type::mega_msg_source_location, "UNDEFINED" },
         { msg_type::request_info, "request" },
         { msg_type::login_request_path, "request path" },
-        { msg_type::response_error, "response error" },
+        { msg_type::response_msg, "response" },
         { msg_type::file_info, "file info" },
         { msg_type::response_status, "response" },
         { msg_type::response_data, "response data" },
