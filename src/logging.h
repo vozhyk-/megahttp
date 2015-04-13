@@ -9,11 +9,19 @@
 
 namespace logging
 {
+    /* To add a new msg_type:
+     *   add it to this enum
+     *   add its description to logging.cpp:type_description
+     *   add an option for it in config.cpp:logged_types
+     */
     enum class msg_type
     {
+        mega_msg,
+        mega_msg_source_location,
         request_info,
         response_error,
         file_info,
+        response_status,
         response_data,
         download_status,
         download_data,

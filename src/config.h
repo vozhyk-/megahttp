@@ -11,6 +11,7 @@ extern const int server_max_threads;
 
 extern const std::string log_file;
 extern logging::logger::logged_types_map logged_types;
+extern int mega_log_level;
 
 extern const std::chrono::milliseconds mega_request_sleep;
 extern const std::chrono::milliseconds http_response_sleep;

@@ -11,9 +11,12 @@ namespace logging
     // not adding const because no operator[] for it
     map<msg_type, string> type_description
     {
+        { msg_type::mega_msg, "mega" },
+        { msg_type::mega_msg_source_location, "UNDEFINED" },
         { msg_type::request_info, "request" },
         { msg_type::response_error, "response error" },
         { msg_type::file_info, "file info" },
+        { msg_type::response_status, "response" },
         { msg_type::response_data, "response data" },
         { msg_type::download_status, "download" },
         { msg_type::download_data, "download data" },

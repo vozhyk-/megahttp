@@ -27,7 +27,7 @@ Logs are written to `megahttp.log` in the current directory by default.
 
 Configuration
 -------------
-See `src/config.c`
+See `src/config.cpp`
 
 Dependencies
 ------------

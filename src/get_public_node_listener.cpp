@@ -8,9 +8,11 @@ void get_public_node_listener::onRequestFinish(MegaApi *api,
                                                MegaRequest *request,
                                                MegaError *err)
 {
+    /* make a copy —
+     * original err is deleted in MEGA SDK code
+     */
     error = shared_ptr<MegaError>(
         new MegaError(*err));
-    // original err is deleted in MEGA SDK code
 
     if (error->getErrorCode() == MegaError::API_OK)
         result = shared_ptr<MegaNode>(

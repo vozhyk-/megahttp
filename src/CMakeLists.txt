@@ -15,6 +15,7 @@ add_executable(megahttp
   http_server.cpp
   megahttp_resource.cpp
   mega_client.cpp
+  mega_logger.cpp
   get_public_node_listener.cpp
   file_cache.cpp
   file_cache_item.cpp

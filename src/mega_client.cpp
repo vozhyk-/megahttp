@@ -1,5 +1,7 @@
 #include "mega_client.h"
 
+#include "logging.h"
+#include "mega_logger.h"
 #include "get_public_node_listener.h"
 
 using namespace std;
@@ -9,13 +11,15 @@ using namespace mega;
 const char *APP_KEY = "HUc2iQaJ";
 
 unique_ptr<MegaApi> mega_api;
+class mega_logger mega_logger{&logging::logger};
 
 void init_mega()
 {
     // TODO investigate enabling local caching
     mega_api = unique_ptr<MegaApi>(new MegaApi(APP_KEY));
 
-    mega_api->setLogLevel(MegaApi::LOG_LEVEL_INFO);
+    mega_api->setLogLevel(mega_log_level);
+    mega_api->setLoggerObject(&mega_logger);
 }
 
 // @return string for identifying a node in log output
