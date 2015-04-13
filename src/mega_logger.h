@@ -8,6 +8,8 @@
 class mega_logger : public mega::MegaLogger
 {
     class logging::logger *logger;
+
+    std::string str_log_level(int level);
 public:
     mega_logger(class logging::logger *logger) : logger{logger} {}
 
