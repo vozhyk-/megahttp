@@ -86,16 +86,6 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     }
 }
 
-http_response *megahttp_resource::make_error_response(const string &msg,
-                                                      int status_code)
-{
-    logger.log(msg_type::response_error)
-        << msg << endl;
-
-    return new http_response(http_response_builder(msg + '\n', status_code)
-                             .string_response());
-}
-
 ssize_t response_callback::operator()(char *out_buf, size_t max_size)
 {
     char *data;
