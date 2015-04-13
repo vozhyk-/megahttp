@@ -17,7 +17,7 @@ using namespace mega;
 using namespace logging;
 
 
-void megahttp_resource::render_GET(const http_request &req, http_response **res)
+http_response *megahttp_resource::make_GET_response(const http_request &req)
 {
     string mega_url = req.get_arg("url");
 
@@ -30,11 +30,8 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
 
     // Check mega_url
     if (mega_url.empty())
-    {
-        *res = make_error_response(response_msg::empty_url,
+        return make_error_response(response_msg::empty_url,
                                    status_code::bad_request);
-        return;
-    }
     // TODO Further check mega_url — correctness of format, presence of key
 
     // Get node
@@ -57,24 +54,18 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
         auto *cb = new response_callback(node);
 
         // associate http callback with http response
-        *res = new http_response(http_response_builder("")
+        return new http_response(http_response_builder("")
                                  .deferred_response(cb));
-        return;
     }
 
     case MegaError::API_ENOENT: // Not found
-    {
-        *res = make_error_response(response_msg::node_not_found,
+        return make_error_response(response_msg::node_not_found,
                                    status_code::not_found);
-        return;
-    }
 
     default:
-    {
-        *res = make_error_response(
+        return make_error_response(
             response_msg::failed_to_get_node + error->getErrorString() + ".",
             status_code::internal_server_error);
-    }
     }
 }
 
@@ -109,3 +100,8 @@ ssize_t response_callback::operator()(char *out_buf, size_t max_size)
 
     return to_copy;
 };
+
+void megahttp_resource::render_GET(const http_request &req, http_response **res)
+{
+    *res = make_GET_response(req);
+}
