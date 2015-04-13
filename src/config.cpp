@@ -18,6 +18,8 @@ logger::logged_types_map logged_types
     { msg_type::mega_msg, true },
     // variables from HTTP request
     { msg_type::request_info, true },
+    // path of login HTTP request
+    { msg_type::login_request_path, true },
     // error HTTP server returns to client
     { msg_type::response_error, true },
     // info about requested files

@@ -15,5 +15,5 @@ file_cache::item_type &file_cache::operator[](shared_ptr<MegaNode> node)
         return found->second;
     else
         // create new cache_item
-        return items[handle] = item_type(new file_cache_item(node));
+        return items[handle] = item_type{new file_cache_item(node)};
 }

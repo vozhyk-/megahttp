@@ -24,17 +24,9 @@ void megahttp_resource::render_GET(const http_request &req, http_response **res)
     // Log request info
     const auto t = msg_type::request_info;
     if (logger.will_log(t))
-    {
         logger.log(t) << "url: " << mega_url << endl;
 
-        logger.log(t) << "Headers:" << endl;
-
-        map<string, string, header_comparator> headers;
-        req.get_headers(headers);
-        for (auto i : headers)
-            logger.log(t)
-                << "  " << i.first << ": " << i.second << endl;
-    }
+    log_headers(req);
 
     // Check mega_url
     if (mega_url.empty())

@@ -8,7 +8,7 @@ using namespace std;
 using namespace mega;
 
 
-const char *APP_KEY = "HUc2iQaJ";
+const char *app_key = "HUc2iQaJ";
 
 unique_ptr<MegaApi> mega_api;
 class mega_logger mega_logger{&logging::logger};
@@ -16,7 +16,7 @@ class mega_logger mega_logger{&logging::logger};
 void init_mega()
 {
     // TODO investigate enabling local caching
-    mega_api = unique_ptr<MegaApi>(new MegaApi(APP_KEY));
+    mega_api = unique_ptr<MegaApi>(new MegaApi(app_key));
 
     mega_api->setLogLevel(mega_log_level);
     mega_api->setLoggerObject(&mega_logger);

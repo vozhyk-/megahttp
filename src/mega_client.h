@@ -4,7 +4,11 @@
 #include <memory>
 #include <megaapi.h>
 
+
+extern const char *app_key;
+
 extern std::unique_ptr<mega::MegaApi> mega_api;
+
 
 void init_mega();
 
