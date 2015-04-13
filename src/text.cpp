@@ -7,4 +7,6 @@ namespace response_msg
     str failed_to_get_node = "Failed to get MEGA node: ";
 
     str path_email_not_specified = "No email in request path! Path must be in the form /login/your_mega_email/ !";
+
+    str mega_login_failed = "MEGA Login failed: ";
 }

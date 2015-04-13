@@ -12,6 +12,8 @@ namespace response_msg
     extern str failed_to_get_node;
 
     extern str path_email_not_specified;
+
+    extern str mega_login_failed;
 }
 
 #endif // TEXT_H

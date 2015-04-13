@@ -1,6 +1,7 @@
 #include "login_resource.h"
 
 #include "http_server.h"
+#include "mega_client.h"
 #include "logging.h"
 #include "text.h"
 
@@ -9,7 +10,7 @@ using namespace httpserver;
 using namespace logging;
 
 
-void login_resource::render_GET(const http_request &req, http_response **res)
+http_response *login_resource::make_GET_response(const http_request &req)
 {
     vector<string> path = req.get_path_pieces();
 
@@ -28,9 +29,8 @@ void login_resource::render_GET(const http_request &req, http_response **res)
     // Check path
     if (path.size() < 2) // No email specified
     {
-        *res = make_error_response(response_msg::path_email_not_specified,
+        return make_error_response(response_msg::path_email_not_specified,
                                    status_code::bad_request);
-        return;
     }
 
     string username = path.back();
@@ -39,12 +39,28 @@ void login_resource::render_GET(const http_request &req, http_response **res)
     // Check password presence
     if (password.empty())
     {
-        *res = new http_response(
-            http_response_builder("Authenticate")
+        // TODO log
+        return new http_response(
+            http_response_builder("Log in with MEGA email and password.")
             .basic_auth_fail_response("MEGA account"));
-        return;
     }
 
-    *res = make_error_response("Not implemented.",
+    try
+    {
+        add_account(username, password);
+    }
+    catch (const mega_account::other_login_error &e)
+    {
+        return make_error_response(
+            response_msg::mega_login_failed + e.error->getErrorString() + ".",
+            status_code::internal_server_error);
+    }
+
+    return make_error_response("Not implemented.",
                                status_code::not_implemented);
+}
+
+void login_resource::render_GET(const http_request &req, http_response **res)
+{
+    *res = make_GET_response(req);
 }
