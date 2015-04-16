@@ -32,3 +32,17 @@ void basic_resource::log_headers(const http_request &req)
                 << "  " << i.first << ": " << i.second << endl;
     }
 }
+
+void basic_resource::log_path(const vector<string> &path)
+{
+    const auto t = msg_type::login_request_path;
+
+    if (logger.will_log(t))
+    {
+        auto &log = logger.log(t);
+        for (auto &s : path)
+            log << s << "/";
+        log << endl;
+    }
+
+}

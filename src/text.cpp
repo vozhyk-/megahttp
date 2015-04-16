@@ -6,8 +6,11 @@ namespace response_msg
     str node_not_found = "MEGA node not found.";
     str failed_to_get_node = "Failed to get MEGA node: ";
 
-    str path_email_not_specified = "No email in request path! Path must be in the form /login/your_mega_email/ !";
+    str invalid_file_req_path = "Invalid request path! Path must be in the form /mega_email/path/to/file";
+    // TODO explain where to go to log in / ...
+    str not_logged_in = "You are not logged in!";
 
+    str path_email_not_specified = "No email in request path! Path must be in the form /login/your_mega_email/ !";
     str log_in = "Log in with MEGA email and password.";
     str invalid_credentials = "Invalid email/password!";
     str mega_login_successful = "MEGA Login successful.";

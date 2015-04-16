@@ -11,8 +11,10 @@ namespace response_msg
     extern str node_not_found;
     extern str failed_to_get_node;
 
-    extern str path_email_not_specified;
+    extern str invalid_file_req_path;
+    extern str not_logged_in;
 
+    extern str path_email_not_specified;
     extern str log_in;
     extern str mega_login_successful;
     extern str already_logged_in;

@@ -14,24 +14,13 @@ http_response *login_resource::make_GET_response(const http_request &req)
 {
     vector<string> path = req.get_path_pieces();
 
-    // Log request path
-    const auto t = msg_type::login_request_path;
-    if (logger.will_log(t))
-    {
-        auto &log = logger.log(t);
-        for (auto &s : path)
-            log << s << "/";
-        log << endl;
-    }
-
+    log_path(path);
     log_headers(req);
 
     // Check path
     if (path.size() < 2) // No email specified
-    {
         return make_msg_response(response_msg::path_email_not_specified,
                                  status_code::bad_request);
-    }
 
     string username = path.back();
 
