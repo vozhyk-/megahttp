@@ -18,6 +18,8 @@ mega_account::mega_account(const string &username,
     switch (error->getErrorCode())
     {
     case MegaError::API_ENOENT: // email/password invalid
+    case MegaError::API_EARGS:  // Invalid argument
+        // We don't make a distinction, maybe we should?
         throw invalid_credentials{};
 
     case MegaError::API_OK:

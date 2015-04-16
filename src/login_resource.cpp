@@ -49,9 +49,8 @@ http_response *login_resource::make_GET_response(const http_request &req)
         if (password.empty())
         {
             // TODO log
-            return new http_response(
-                http_response_builder(response_msg::log_in)
-                .basic_auth_fail_response(username));
+            return make_auth_fail_response(response_msg::log_in,
+                                           username);
         }
 
         // Try to log in
@@ -61,14 +60,14 @@ http_response *login_resource::make_GET_response(const http_request &req)
         }
         catch (mega_account::invalid_credentials)
         {
-            return new http_response(
-                http_response_builder(response_msg::invalid_credentials)
-                .basic_auth_fail_response(username));
+            return make_auth_fail_response(response_msg::invalid_credentials,
+                                           username);
         }
         catch (const mega_account::other_login_error &e)
         {
             return make_msg_response(
-                response_msg::mega_login_failed + e.error->getErrorString() + ".",
+                response_msg::mega_login_failed
+                + e.error->getErrorString() + ".",
                 status_code::internal_server_error);
         }
 
@@ -76,6 +75,15 @@ http_response *login_resource::make_GET_response(const http_request &req)
             response_msg::mega_login_successful,
             status_code::ok);
     }
+}
+
+http_response *login_resource::make_auth_fail_response(const string &msg,
+                                                       const string &username)
+{
+    logger.log(msg_type::response_msg) << msg << endl;
+
+    return new http_response(http_response_builder(msg + '\n')
+                             .basic_auth_fail_response(username));
 }
 
 void login_resource::render_GET(const http_request &req, http_response **res)
