@@ -30,12 +30,6 @@ void add_account(const string &username, const string &password)
         shared_ptr<mega_account>(new mega_account{username, password});
 }
 
-// @return string for identifying a node in log output
-string node_id(shared_ptr<MegaNode> node)
-{
-    return "(" + string(node->getBase64Handle()) + ") ";
-}
-
 shared_ptr<MegaError> get_mega_public_node(string url,
                                            shared_ptr<MegaNode> &result)
 {

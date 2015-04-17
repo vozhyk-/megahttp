@@ -17,8 +17,6 @@ extern std::unordered_map<std::string, std::shared_ptr<mega_account>>
 
 void init_mega();
 
-std::string node_id(std::shared_ptr<mega::MegaNode> node);
-
 void add_account(const std::string &username,
                  const std::string &password);
 

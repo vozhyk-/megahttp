@@ -11,6 +11,7 @@ add_executable(megahttp
   main.cpp
   config.cpp
   logging.cpp
+  logging_utils.cpp
   text.cpp
   http_server.cpp
   megahttp_resource.cpp

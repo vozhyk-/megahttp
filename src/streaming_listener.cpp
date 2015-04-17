@@ -3,11 +3,13 @@
 #include <iostream>
 
 #include "logging.h"
+#include "logging_utils.h"
 #include "mega_client.h"
 #include "file_cache_item.h"
 
 using namespace std;
 using namespace mega;
+
 using namespace logging;
 
 streaming_listener::streaming_listener(file_cache_item &cache_item)
@@ -18,7 +20,7 @@ streaming_listener::streaming_listener(file_cache_item &cache_item)
 void streaming_listener::onTransferStart(MegaApi *api,
                                          MegaTransfer *transfer)
 {
-    id = node_id(cache_item.node);
+    id = node_id(*cache_item.node);
 
     logger.log(msg_type::download_status)
         << id

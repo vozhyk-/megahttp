@@ -4,11 +4,14 @@
 
 #include "http_server.h"
 #include "mega_client.h"
+#include "logging_utils.h"
 #include "text.h"
 
 using namespace std;
 using namespace httpserver;
 using namespace mega;
+
+using namespace logging;
 
 http_response *account_files_resource::make_GET_response(
     const http_request &req)
@@ -46,11 +49,13 @@ http_response *account_files_resource::make_GET_response(
         account->getNodeByPath(file_path.c_str()) };
 
     if (!node)
-        /* ... */;
+        return make_msg_response(response_msg::node_not_found,
+                                 status_code::not_found);
 
     // TODO check if directory, if yes - fail
 
     // Log file name, size
+    log_node(*node);
 
     // Serve the node
 

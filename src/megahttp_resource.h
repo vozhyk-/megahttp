@@ -6,6 +6,7 @@
 #include "basic_resource.h"
 #include "mega_client.h"
 #include "file_cache.h"
+#include "logging_utils.h"
 
 
 class megahttp_resource
@@ -27,7 +28,7 @@ class response_callback : public httpserver::data_callback
 
 public:
     response_callback(std::shared_ptr<mega::MegaNode> node)
-        : cached{file_cache[node]}, file_offset{0}, id{node_id(node)}
+        : cached{file_cache[node]}, file_offset{0}, id{logging::node_id(*node)}
     {
     }
 

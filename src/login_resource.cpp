@@ -3,10 +3,12 @@
 #include "http_server.h"
 #include "mega_client.h"
 #include "logging.h"
+#include "logging_utils.h"
 #include "text.h"
 
 using namespace std;
 using namespace httpserver;
+
 using namespace logging;
 
 

@@ -42,13 +42,7 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
     {
     case MegaError::API_OK:
     {
-        string id = node_id(node);
-        logger.log(msg_type::file_info)
-            << id << "file name: " << node->getName()
-            << endl;
-        logger.log(msg_type::file_info)
-            << id << "file size: " << node->getSize()
-            << endl;
+        log_node(*node);
 
         // TODO look at HTTP request range !
         auto *cb = new response_callback(node);
