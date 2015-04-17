@@ -39,11 +39,14 @@ http_response *account_files_resource::make_GET_response(
         return make_msg_response(response_msg::not_logged_in,
                                  status_code::bad_request);
 
-    string file_path; // TODO path.subseq(...).join('/')
+    string file_path = path_to_string(path.begin() + 1, path.end());
 
     // TODO fetchNodes must have been called previously for this to work
     unique_ptr<MegaNode> node{
         account->getNodeByPath(file_path.c_str()) };
+
+    if (!node)
+        /* ... */;
 
     // TODO check if directory, if yes - fail
 

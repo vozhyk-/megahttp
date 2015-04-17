@@ -35,14 +35,15 @@ void basic_resource::log_headers(const http_request &req)
 
 void basic_resource::log_path(const vector<string> &path)
 {
-    const auto t = msg_type::login_request_path;
+    logger.log(msg_type::login_request_path)
+        << path_to_string(path.begin(), path.end()) << endl;
+}
 
-    if (logger.will_log(t))
-    {
-        auto &log = logger.log(t);
-        for (auto &s : path)
-            log << s << "/";
-        log << endl;
-    }
-
+string basic_resource::path_to_string(basic_resource::str_iter beg,
+                                      basic_resource::str_iter end)
+{
+    return accumulate(beg, end, string{},
+                      [](const string &a, const string &b) {
+                          return a + '/' + b;
+                      });
 }
