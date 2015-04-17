@@ -14,10 +14,10 @@ add_executable(megahttp
   logging_utils.cpp
   text.cpp
   http_server.cpp
+  http_utils.cpp
   megahttp_resource.cpp
   account_files_resource.cpp
   login_resource.cpp
-  basic_resource.cpp
   mega_client.cpp
   mega_account.cpp
   mega_logger.cpp

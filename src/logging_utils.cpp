@@ -2,7 +2,7 @@
 
 #include "logging.h"
 #include "mega_client.h"
-#include "basic_resource.h"
+#include "http_utils.h"
 
 using namespace std;
 using namespace httpserver;
@@ -37,7 +37,7 @@ namespace logging
     void log_path(const vector<string> &path)
     {
         logger.log(msg_type::login_request_path)
-            << basic_resource::path_to_string(path.begin(), path.end()) << endl;
+            << path_to_string(path.begin(), path.end()) << endl;
     }
 
     // not const because .get* functions aren't

@@ -3,15 +3,13 @@
 
 #include <httpserver.hpp>
 
-#include "basic_resource.h"
 #include "mega_client.h"
 #include "file_cache.h"
 #include "logging_utils.h"
 
 
 class megahttp_resource
-    : public basic_resource,
-      public httpserver::http_resource<megahttp_resource>
+    : public httpserver::http_resource<megahttp_resource>
 {
     httpserver::http_response *make_GET_response(
         const httpserver::http_request &);

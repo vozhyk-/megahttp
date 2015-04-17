@@ -3,11 +3,9 @@
 
 #include <httpserver.hpp>
 
-#include "basic_resource.h"
 
 class account_files_resource
-    : public basic_resource,
-      public httpserver::http_resource<account_files_resource>
+    : public httpserver::http_resource<account_files_resource>
 {
     httpserver::http_response *make_GET_response(
         const httpserver::http_request &);

@@ -1,6 +1,7 @@
 #include "login_resource.h"
 
 #include "http_server.h"
+#include "http_utils.h"
 #include "mega_client.h"
 #include "logging.h"
 #include "logging_utils.h"

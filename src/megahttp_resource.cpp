@@ -9,6 +9,7 @@
 #include "logging.h"
 #include "text.h"
 #include "http_server.h"
+#include "http_utils.h"
 
 using namespace std;
 using namespace httpserver;
