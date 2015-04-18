@@ -17,11 +17,17 @@ Start the server with
 ```bash
 bin/megahttp
 ```
-Then point a browser or any other HTTP client to
+
+Log into your MEGA account using HTTP Basic authentication at `http://localhost:8080/login/your@email`. Then point a browser or any other HTTP client to
 ```
-http://localhost:8080/?url=MEGA_URL
+http://localhost:8080/your@email/path/to/file
 ```
-where MEGA_URL is a public link to a file in MEGA (with the key built-in).
+
+Or you can use publicly-shared files without logging in:
+```
+http://localhost:8080/public/?url=MEGA_URL
+```
+where MEGA_URL is a public link to the file (with the key built-in).
 
 Logs are written to `megahttp.log` in the current directory by default.
 
@@ -33,7 +39,7 @@ Dependencies
 ------------
 
 * [CMake](http://www.cmake.org/) - build system
-* [libhttpserver](https://github.com/etr/libhttpserver) - HTTP server library
+* [libhttpserver](https://github.com/vozhyk-/libhttpserver) - HTTP server library
 * [MEGA SDK](https://github.com/meganz/sdk) - MEGA client library
 * [Doxygen](http://www.stack.nl/~dimitri/doxygen/) (optional) - tool for
 generating documentation
