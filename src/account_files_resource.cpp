@@ -4,6 +4,7 @@
 
 #include "http_server.h"
 #include "http_utils.h"
+#include "streaming_response.h"
 #include "mega_client.h"
 #include "logging_utils.h"
 #include "text.h"
@@ -55,12 +56,7 @@ http_response *account_files_resource::make_GET_response(
 
     // TODO check if directory, if yes - fail
 
-    // Log file name, size
-    log_node(*node);
-
-    // Serve the node
-
-    return nullptr; //stub
+    return make_node_response(*node);
 }
 
 void account_files_resource::render_GET(const http_request &req,

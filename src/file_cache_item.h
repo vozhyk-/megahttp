@@ -18,12 +18,9 @@ class file_cache_item
     void start_download(size_t start, size_t size);
 
 public:
-    file_cache_item(std::shared_ptr<mega::MegaNode> node);
+    file_cache_item(mega::MegaNode &node);
 
-    // we don't want us to be copied
-    file_cache_item &operator=(file_cache_item &&) = default;
-
-    std::shared_ptr<mega::MegaNode> node;
+    mega::MegaNode &node;
     size_t full_size;
     bool downloading;
 

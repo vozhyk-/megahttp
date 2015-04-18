@@ -1,15 +1,12 @@
 #include "megahttp_resource.h"
 
-#include "config.h"
-
-#include <iostream>
 #include <memory>
-#include <thread>
 
 #include "logging.h"
 #include "text.h"
 #include "http_server.h"
 #include "http_utils.h"
+#include "streaming_response.h"
 
 using namespace std;
 using namespace httpserver;
@@ -43,14 +40,7 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
     {
     case MegaError::API_OK:
     {
-        log_node(*node);
-
-        // TODO look at HTTP request range !
-        auto *cb = new response_callback(node);
-
-        // associate http callback with http response
-        return new http_response(http_response_builder("")
-                                 .deferred_response(cb));
+        return make_node_response(*node);
     }
 
     case MegaError::API_ENOENT: // Not found
@@ -63,38 +53,6 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
             status_code::internal_server_error);
     }
 }
-
-ssize_t response_callback::operator()(char *out_buf, size_t max_size)
-{
-    char *data;
-    ssize_t to_copy = cached->get_chunk(file_offset, max_size, data);
-
-    logger.log(msg_type::response_data)
-        << id
-        << "file_offset " << file_offset
-        << ", max_size " << max_size
-        << ", to_copy " << to_copy
-        << ", data " << (void *)data
-        << endl;
-
-    if (to_copy > 0) // we got data
-    {
-        memcpy(out_buf, data, to_copy);
-        file_offset += to_copy;
-    }
-    else if (to_copy == 0) // data not available yet
-    {
-        this_thread::sleep_for(http_response_sleep);
-    }
-    else if (to_copy == -1) // end of stream
-    {
-        logger.log(msg_type::response_status)
-            << id
-            << "finished." << endl;
-    }
-
-    return to_copy;
-};
 
 void megahttp_resource::render_GET(const http_request &req, http_response **res)
 {

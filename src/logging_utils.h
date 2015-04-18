@@ -1,5 +1,5 @@
-#ifndef LOG_UTILS_H
-#define LOG_UTILS_H
+#ifndef LOGGING_UTILS_H
+#define LOGGING_UTILS_H
 
 #include <httpserver.hpp>
 #include <megaapi.h>
@@ -13,4 +13,4 @@ namespace logging
     void log_node(mega::MegaNode &node);
 }
 
-#endif // LOG_UTILS_H
+#endif // LOGGING_UTILS_H

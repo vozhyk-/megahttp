@@ -5,8 +5,8 @@
 using namespace std;
 using namespace mega;
 
-file_cache_item::file_cache_item(shared_ptr<MegaNode> node)
-    : node(node), full_size(node->getSize()),
+file_cache_item::file_cache_item(MegaNode &node)
+    : node(node), full_size(node.getSize()),
       downloading(false), mega_transfer_listener(*this)
 {
     buffer.reserve(full_size);
@@ -19,7 +19,7 @@ void file_cache_item::start_download()
 
 void file_cache_item::start_download(size_t start, size_t size)
 {
-    mega_api->startStreaming(node.get(), start, size, &mega_transfer_listener);
+    mega_api->startStreaming(&node, start, size, &mega_transfer_listener);
     downloading = true;
 }
 

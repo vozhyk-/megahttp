@@ -25,6 +25,7 @@ add_executable(megahttp
   file_cache.cpp
   file_cache_item.cpp
   streaming_listener.cpp
+  streaming_response.cpp
   )
 set_property(TARGET megahttp PROPERTY CXX_STANDARD 11)
 set_property(TARGET megahttp PROPERTY CXX_STANDARD_REQIRED ON)

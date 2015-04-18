@@ -7,7 +7,6 @@
 
 httpserver::http_response *make_msg_response(const std::string &msg,
                                              int status_code);
-httpserver::http_response *make_node_response(mega::MegaNode &node);
 
 // str_iter not used anywhere else
 using str_iter = std::vector<std::string>::const_iterator;

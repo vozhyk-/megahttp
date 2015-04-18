@@ -10,11 +10,11 @@
 
 class file_cache
 {
-    using item_type = std::shared_ptr<file_cache_item>;
+    using item_type = std::unique_ptr<file_cache_item>;
     std::unordered_map<mega::MegaHandle, item_type> items;
 
 public:
-    item_type &operator[](std::shared_ptr<mega::MegaNode>);
+    file_cache_item &operator[](mega::MegaNode &);
 };
 
 extern file_cache file_cache;
