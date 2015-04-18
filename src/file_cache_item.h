@@ -3,12 +3,15 @@
 
 #include <memory>
 
+#include "mega_client.h"
 #include "streaming_listener.h"
 
 
 class file_cache_item
 {
     friend class streaming_listener;
+
+    mega::MegaApi &mega_api;
 
     std::vector<char> buffer;
 
@@ -18,10 +21,13 @@ class file_cache_item
     void start_download(size_t start, size_t size);
 
 public:
-    file_cache_item(mega::MegaNode &node);
+    using node_ptr = std::unique_ptr<mega::MegaNode>;
 
-    mega::MegaNode &node;
-    size_t full_size;
+    // takes node away (move)
+    file_cache_item(node_ptr node, mega::MegaApi &api);
+
+    node_ptr node;
+    int64_t full_size;
     bool downloading;
 
     void append_data(char *data, size_t size);

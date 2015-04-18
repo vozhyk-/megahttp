@@ -11,7 +11,7 @@
 extern const char *app_key;
 
 extern std::unique_ptr<mega::MegaApi> mega_api;
-extern std::unordered_map<std::string, std::shared_ptr<mega_account>>
+extern std::unordered_map<std::string, std::unique_ptr<mega_account>>
     mega_accounts;
 
 
@@ -22,6 +22,6 @@ void add_account(const std::string &username,
 
 std::shared_ptr<mega::MegaError> get_mega_public_node(
     std::string url,
-    std::shared_ptr<mega::MegaNode> &result);
+    std::unique_ptr<mega::MegaNode> &result);
 
 #endif // MEGA_CLIENT_H

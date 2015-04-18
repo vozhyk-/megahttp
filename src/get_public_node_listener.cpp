@@ -15,8 +15,8 @@ void get_public_node_listener::onRequestFinish(MegaApi *api,
         new MegaError(*err));
 
     if (error->getErrorCode() == MegaError::API_OK)
-        result = shared_ptr<MegaNode>(
-            request->getPublicMegaNode());
+        result = unique_ptr<MegaNode>{
+            request->getPublicMegaNode()};
 
     done = true;
 }

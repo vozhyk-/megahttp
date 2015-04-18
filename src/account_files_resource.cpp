@@ -36,7 +36,7 @@ http_response *account_files_resource::make_GET_response(
 
     string username = path.front();
 
-    auto account = mega_accounts[username];
+    auto &account = mega_accounts[username];
 
     if (!account)
         // For now just refuse to continue
@@ -56,7 +56,7 @@ http_response *account_files_resource::make_GET_response(
 
     // TODO check if directory, if yes - fail
 
-    return make_node_response(*node);
+    return make_node_response(move(node), *account);
 }
 
 void account_files_resource::render_GET(const http_request &req,

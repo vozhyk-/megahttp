@@ -14,7 +14,8 @@ class file_cache
     std::unordered_map<mega::MegaHandle, item_type> items;
 
 public:
-    file_cache_item &operator[](mega::MegaNode &);
+    file_cache_item &operator()(std::unique_ptr<mega::MegaNode>,
+                                mega::MegaApi &);
 };
 
 extern file_cache file_cache;

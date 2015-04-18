@@ -6,9 +6,10 @@ using namespace mega;
 
 class file_cache file_cache;
 
-file_cache_item &file_cache::operator[](MegaNode &node)
+file_cache_item &file_cache::operator()(unique_ptr<MegaNode> node,
+                                        MegaApi &api)
 {
-    MegaHandle handle = node.getHandle();
+    MegaHandle handle = node->getHandle();
     auto found = items.find(handle);
 
     if (found != items.end()) // key present
@@ -18,7 +19,8 @@ file_cache_item &file_cache::operator[](MegaNode &node)
     else
     {
         // create new cache_item
-        auto &p = items[handle] = item_type{new file_cache_item(node)};
+        auto &p = items[handle] = item_type{
+            new file_cache_item{move(node), api}};
         return *p;
     }
 }

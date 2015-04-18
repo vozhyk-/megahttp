@@ -33,14 +33,14 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
     // TODO Further check mega_url — correctness of format, presence of key
 
     // Get node
-    shared_ptr<MegaNode> node;
+    unique_ptr<MegaNode> node;
     auto error = get_mega_public_node(mega_url, node);
 
     switch (error->getErrorCode())
     {
     case MegaError::API_OK:
     {
-        return make_node_response(*node);
+        return make_node_response(move(node), *mega_api);
     }
 
     case MegaError::API_ENOENT: // Not found

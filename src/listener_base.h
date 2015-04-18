@@ -25,7 +25,7 @@ public:
             std::this_thread::sleep_for(mega_request_sleep);
         }
 
-        return result;
+        return move(result);
     }
 };
 

@@ -1,0 +1,35 @@
+#ifndef FILE_RESPONSE_H
+#define FILE_RESPONSE_H
+
+#include <httpserver.hpp>
+#include <megaapi.h>
+
+#include "logging_utils.h"
+#include "file_cache.h"
+
+
+httpserver::http_response *make_node_response(std::unique_ptr<mega::MegaNode>,
+                                              mega::MegaApi &);
+
+// used only here, can be moved to .cpp
+class response_callback : public httpserver::data_callback
+{
+    file_cache_item &cached;
+    size_t file_offset;
+    std::string id;
+
+public:
+    using node_ptr = std::unique_ptr<mega::MegaNode>;
+    response_callback(node_ptr node, mega::MegaApi &api)
+        : file_offset{0},
+          cached{file_cache(move(node), api)},
+          id{logging::node_id(*cached.node)}
+    {
+    }
+
+    ssize_t operator()(char *out_buf, size_t max_size);
+
+    ~response_callback() {}
+};
+
+#endif // FILE_RESPONSE_H

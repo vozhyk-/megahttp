@@ -6,7 +6,7 @@
 
 
 class get_public_node_listener
-    : public listener_base<std::shared_ptr<mega::MegaNode>>,
+    : public listener_base<std::unique_ptr<mega::MegaNode>>,
       public mega::MegaRequestListener
 {
 public:
