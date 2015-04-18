@@ -4,13 +4,13 @@
 #include <memory>
 #include <megaapi.h>
 
-#include "listener_base.h"
+#include "result_listener.h"
 
 
 class mega_account : public mega::MegaApi
 {
     class error_listener
-        : public listener_base<std::shared_ptr<mega::MegaError>>,
+        : public result_listener<std::shared_ptr<mega::MegaError>>,
           public mega::MegaRequestListener
     {
         void onRequestFinish(mega::MegaApi *,

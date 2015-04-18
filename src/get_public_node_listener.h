@@ -2,11 +2,11 @@
 #define GET_PUBLIC_NODE_LISTENER_H
 
 #include "mega_client.h"
-#include "listener_base.h"
+#include "result_listener.h"
 
 
 class get_public_node_listener
-    : public listener_base<std::unique_ptr<mega::MegaNode>>,
+    : public result_listener<std::unique_ptr<mega::MegaNode>>,
       public mega::MegaRequestListener
 {
 public:

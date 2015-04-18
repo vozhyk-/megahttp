@@ -1,18 +1,18 @@
-#ifndef LISTENER_BASE_H
-#define LISTENER_BASE_H
+#ifndef RESULT_LISTENER_H
+#define RESULT_LISTENER_H
 
 #include "config.h"
 
 #include <thread>
 
-template<typename result_type> class listener_base
+template<typename result_type> class result_listener
 {
 public:
     /* done and result can be set from outside. Make private? */
     bool done;
     result_type result;
 
-    listener_base()
+    result_listener()
     {
         done = false;
         result = {};
@@ -29,4 +29,4 @@ public:
     }
 };
 
-#endif // LISTENER_BASE_H
+#endif // RESULT_LISTENER_H
