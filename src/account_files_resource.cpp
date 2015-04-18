@@ -46,9 +46,7 @@ http_response *account_files_resource::make_GET_response(
 
     string file_path = path_to_string(path.begin() + 1, path.end());
 
-    // TODO fetchNodes must have been called previously for this to work
-    unique_ptr<MegaNode> node{
-        account->getNodeByPath(file_path.c_str()) };
+    auto node = account->get_node_by_path(file_path);
 
     if (!node)
         return make_msg_response(response_msg::node_not_found,

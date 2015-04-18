@@ -10,7 +10,7 @@ mega_account::mega_account(const string &username,
                            const string &password)
     : MegaApi(app_key)
 {
-    login_listener listener;
+    error_listener listener;
     login(username.c_str(), password.c_str(), &listener);
 
     shared_ptr<MegaError> error = listener.wait_for_result();
@@ -23,6 +23,7 @@ mega_account::mega_account(const string &username,
         throw invalid_credentials{};
 
     case MegaError::API_OK:
+        fetch_nodes_start();
         return;
 
     default:
@@ -30,7 +31,21 @@ mega_account::mega_account(const string &username,
     }
 }
 
-void mega_account::login_listener::onRequestFinish(MegaApi *,
+void mega_account::fetch_nodes_start()
+{
+    fetchNodes(&fetch_nodes_listener);
+}
+
+unique_ptr<MegaNode> mega_account::get_node_by_path(string path)
+{
+    // TODO check returned error
+    fetch_nodes_listener.wait_for_result();
+    // TODO log error
+
+    return unique_ptr<MegaNode>{ getNodeByPath(path.c_str()) };
+}
+
+void mega_account::error_listener::onRequestFinish(MegaApi *,
                                                    MegaRequest *,
                                                    MegaError *error)
 {

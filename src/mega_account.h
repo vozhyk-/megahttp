@@ -9,7 +9,7 @@
 
 class mega_account : public mega::MegaApi
 {
-    class login_listener
+    class error_listener
         : public listener_base<std::shared_ptr<mega::MegaError>>,
           public mega::MegaRequestListener
     {
@@ -17,6 +17,10 @@ class mega_account : public mega::MegaApi
                              mega::MegaRequest *,
                              mega::MegaError *);
     };
+
+    class error_listener fetch_nodes_listener;
+
+    void fetch_nodes_start();
 
 public:
     class login_error : public std::exception
@@ -48,6 +52,8 @@ public:
 
     mega_account(const std::string &username,
                  const std::string &password);
+
+    std::unique_ptr<mega::MegaNode> get_node_by_path(std::string path);
 };
 
 #endif // MEGA_ACCOUNT_H
