@@ -4,20 +4,11 @@
 #include <memory>
 #include <megaapi.h>
 
-#include "result_listener.h"
+#include "error_listener.h"
 
 
 class mega_account : public mega::MegaApi
 {
-    class error_listener
-        : public result_listener<std::shared_ptr<mega::MegaError>>,
-          public mega::MegaRequestListener
-    {
-        void onRequestFinish(mega::MegaApi *,
-                             mega::MegaRequest *,
-                             mega::MegaError *);
-    };
-
     class error_listener fetch_nodes_listener;
 
     void fetch_nodes_start();

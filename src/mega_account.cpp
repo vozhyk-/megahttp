@@ -44,11 +44,3 @@ unique_ptr<MegaNode> mega_account::get_node_by_path(string path)
 
     return unique_ptr<MegaNode>{ getNodeByPath(path.c_str()) };
 }
-
-void mega_account::error_listener::onRequestFinish(MegaApi *,
-                                                   MegaRequest *,
-                                                   MegaError *error)
-{
-    result = shared_ptr<MegaError>(new MegaError(*error));
-    done = true;
-}
