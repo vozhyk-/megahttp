@@ -15,7 +15,7 @@ add_executable(megahttp
   text.cpp
   http_server.cpp
   http_utils.cpp
-  megahttp_resource.cpp
+  public_files_resource.cpp
   account_files_resource.cpp
   login_resource.cpp
   mega_client.cpp

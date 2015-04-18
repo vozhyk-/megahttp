@@ -1,4 +1,4 @@
-#include "megahttp_resource.h"
+#include "public_files_resource.h"
 
 #include <memory>
 
@@ -15,7 +15,7 @@ using namespace mega;
 using namespace logging;
 
 
-http_response *megahttp_resource::make_GET_response(const http_request &req)
+http_response *public_files_resource::make_GET_response(const http_request &req)
 {
     string mega_url = req.get_arg("url");
 
@@ -54,7 +54,7 @@ http_response *megahttp_resource::make_GET_response(const http_request &req)
     }
 }
 
-void megahttp_resource::render_GET(const http_request &req, http_response **res)
+void public_files_resource::render_GET(const http_request &req, http_response **res)
 {
     *res = make_GET_response(req);
 }

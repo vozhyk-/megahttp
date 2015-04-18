@@ -6,8 +6,8 @@
 #include "mega_client.h"
 
 
-class megahttp_resource
-    : public httpserver::http_resource<megahttp_resource>
+class public_files_resource
+    : public httpserver::http_resource<public_files_resource>
 {
     httpserver::http_response *make_GET_response(
         const httpserver::http_request &);
