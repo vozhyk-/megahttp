@@ -8,7 +8,7 @@ using namespace logging;
 
 
 const int server_port = 8080;
-const int server_max_threads = 2;
+const int server_max_threads = 5;
 
 const string log_file = "megahttp.log";
 // Types of messages that should be logged
