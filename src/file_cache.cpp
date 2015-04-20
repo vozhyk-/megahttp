@@ -1,5 +1,7 @@
 #include "file_cache.h"
 
+#include <numeric>
+
 using namespace std;
 using namespace mega;
 
@@ -23,4 +25,13 @@ file_cache_item &file_cache::operator()(unique_ptr<MegaNode> node,
             new file_cache_item{move(node), api}};
         return *p;
     }
+}
+
+size_t file_cache::mem_used()
+{
+    // Sum of all item.mem_used()
+    return accumulate(items.begin(), items.end(), 0,
+                      [](size_t prev, const map_elem_type &i) {
+                          return prev + i.second->mem_used();
+                      });
 }

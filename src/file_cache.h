@@ -10,12 +10,17 @@
 
 class file_cache
 {
-    using item_type = std::unique_ptr<file_cache_item>;
-    std::unordered_map<mega::MegaHandle, item_type> items;
-
 public:
     file_cache_item &operator()(std::unique_ptr<mega::MegaNode>,
                                 mega::MegaApi &);
+
+    size_t mem_used();
+
+    using item_type = std::unique_ptr<file_cache_item>;
+    using map_elem_type = std::pair<const mega::MegaHandle,
+                                    item_type>;
+
+    std::unordered_map<mega::MegaHandle, item_type> items;
 };
 
 extern file_cache file_cache;

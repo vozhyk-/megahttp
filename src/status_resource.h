@@ -9,6 +9,9 @@ class status_resource
 {
     httpserver::http_response *make_GET_response(
         const httpserver::http_request &);
+
+    void print_cache_stats(std::ostringstream &res);
+
 public:
     void render_GET(const httpserver::http_request &,
                     httpserver::http_response **);

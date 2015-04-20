@@ -26,12 +26,17 @@ public:
     // takes node away (move)
     file_cache_item(node_ptr node, mega::MegaApi &api);
 
+    void append_data(char *data, size_t size);
+    ssize_t get_chunk(size_t start, size_t max_size, char *&result);
+
     node_ptr node;
     int64_t full_size;
     bool downloading;
 
-    void append_data(char *data, size_t size);
-    ssize_t get_chunk(size_t start, size_t max_size, char *&result);
+    // Memory allocated for the buffer
+    size_t mem_used();
+    // How much of the file is in the cache
+    size_t have_bytes();
 };
 
 #endif // FILE_CACHE_ITEM_H

@@ -60,3 +60,13 @@ ssize_t file_cache_item::get_chunk(size_t start, size_t max_size, char *&result)
 
     return min(max_size, buffer.size() - start);
 }
+
+size_t file_cache_item::mem_used()
+{
+    return buffer.capacity();
+}
+
+size_t file_cache_item::have_bytes()
+{
+    return buffer.size();
+}
