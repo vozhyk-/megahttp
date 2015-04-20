@@ -1,0 +1,11 @@
+Garbage collection in cache
+---------------------------
+Garbage collector is run in `cache_item`'s constructor if
+(cache_max_memory - cache_used_memory < new_file.size) [1]
+
+It sorts the `cache_item`s in least-recently-used-first order
+and removes them (if they are not being served at the moment)
+until [1] becomes false or it reaches the end of the list.
+
+file_cache_item{}
+ \-> file_cache.garbage_collect()
