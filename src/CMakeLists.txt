@@ -18,6 +18,7 @@ add_executable(megahttp
   public_files_resource.cpp
   account_files_resource.cpp
   login_resource.cpp
+  status_resource.cpp
   mega_client.cpp
   mega_account.cpp
   mega_logger.cpp
