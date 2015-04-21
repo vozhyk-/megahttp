@@ -23,6 +23,7 @@ file_cache_item::file_cache_item(unique_ptr<MegaNode> node,
 
 file_cache_item::~file_cache_item()
 {
+    // TODO Stop download
     cache.buf_mem_used -= full_size;
 }
 

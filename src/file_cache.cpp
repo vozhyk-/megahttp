@@ -25,10 +25,12 @@ file_cache_item &file_cache::operator()(unique_ptr<MegaNode> node,
     }
     else
     {
-        // create new cache_item
-        auto &p = items[handle] = item_type{
-            new file_cache_item{move(node), api, *this}};
-        return *p;
+        // Add new cache_item
+        using temp = pair<items_type::iterator, bool>;
+        temp i = items.insert(make_pair(handle, item_type{
+                    new file_cache_item{move(node), api, *this}}));
+        // return newly added item
+        return *i.first->second;
     }
 }
 
@@ -39,14 +41,21 @@ size_t file_cache::mem_used()
 
 bool file_cache::enough_free(size_t needed)
 {
-    return mem_limit - mem_used() < needed;
+    // TODO Change types?
+    logger.log(msg_type::file_cache_gc)
+        << "mem_used() + needed: " << mem_used() + needed
+        << endl;
+    logger.log(msg_type::file_cache_gc)
+        << "mem_limit: " << mem_limit << endl;
+    // Using + so that there is no unsigned overflow
+    return mem_used() + needed <= mem_limit;
 }
 
 void file_cache::ensure_free(size_t needed)
 {
     unique_lock<mutex> lock {gc_mutex};
 
-    if (enough_free(needed))
+    if (!enough_free(needed))
         garbage_collect(needed);
 }
 
@@ -73,7 +82,7 @@ void file_cache::garbage_collect(size_t needed)
     logger.log(t)
         << "started." << endl;
 
-    logger.log(t) << items.size() << " items to check" << endl;
+    logger.log(t) << "checking " << items.size() << " items" << endl;
 
     // Put all items not in use into queue
     for (map_iter i = items.begin(); i != items.end(); ++i)
@@ -106,4 +115,6 @@ void file_cache::garbage_collect(size_t needed)
 
     logger.log(t)
         << "freed " << freed << " bytes." << endl;
+    logger.log(t)
+        << "used now: " << mem_used() << endl;
 }
