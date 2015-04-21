@@ -10,6 +10,13 @@ using namespace logging;
 const int server_port = 8080;
 const int server_max_threads = 5;
 
+/*
+ * Maximum size of cache's buffers in bytes.
+ * Cache can grow bigger than this amount if all files in it are being used
+ * at the time of garbage collection.
+ */
+const size_t max_cache_size = 20*1024*1024;
+
 const string log_file = "megahttp.log";
 // Types of messages that should be logged
 logger::logged_types_map logged_types
@@ -28,6 +35,8 @@ logger::logged_types_map logged_types
     { msg_type::response_status, true },
     // download start/finish, error
     { msg_type::download_status, true },
+    // file cache's garbage collector working details
+    { msg_type::file_cache_gc, true },
 
     // chunks returned to HTTP client (a lot of output)
     { msg_type::response_data, false },

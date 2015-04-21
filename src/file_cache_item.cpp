@@ -4,12 +4,26 @@ using namespace std;
 using namespace mega;
 
 
-file_cache_item::file_cache_item(unique_ptr<MegaNode> node, MegaApi &api)
-    : mega_api{api}, node{move(node)},
+file_cache_item::file_cache_item(unique_ptr<MegaNode> node,
+                                 MegaApi &api,
+                                 class file_cache &cache)
+    : mega_api{api}, cache{cache}, node{move(node)},
       full_size{this->node->getSize()},
       downloading(false), mega_transfer_listener(*this)
 {
+    /*
+     * TODO ensure nobody else does the same at this time.
+     *      Allow only one file_cache_item at a time to reserve memory?
+     */
+    cache.ensure_free(full_size);
+
     buffer.reserve(full_size);
+    cache.buf_mem_used += full_size;
+}
+
+file_cache_item::~file_cache_item()
+{
+    cache.buf_mem_used -= full_size;
 }
 
 void file_cache_item::start_download()

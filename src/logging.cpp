@@ -21,6 +21,7 @@ namespace logging
         { msg_type::response_data, "response data" },
         { msg_type::download_status, "download" },
         { msg_type::download_data, "download data" },
+        { msg_type::file_cache_gc, "file cache gc" },
     };
 
     string date()

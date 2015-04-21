@@ -26,6 +26,7 @@ namespace logging
         response_data,
         download_status,
         download_data,
+        file_cache_gc,
     };
 
     std::ostream &operator<<(std::ostream &out, msg_type type);
