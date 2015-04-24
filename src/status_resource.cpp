@@ -52,6 +52,7 @@ void status_resource::print_cache_stats(ostringstream &res)
     res << "<table>" << endl
         << "<th>"
         << " <td>Handle</td>"
+        << " <td>In use by</td>"
         << " <td>Filename</td>"
         << " <td>File size</td>"
         << " <td>Memory used</td>"
@@ -64,6 +65,7 @@ void status_resource::print_cache_stats(ostringstream &res)
 
         res << "<tr>"
             << " <td>" << node->getBase64Handle() << "</td>"
+            << " <td>" << item->in_use.get() << "</td>"
             << " <td>" << node->getName() << "</td>"
             << " <td>" << item->full_size << "</td>"
             << " <td>" << item->mem_used() << "</td>"

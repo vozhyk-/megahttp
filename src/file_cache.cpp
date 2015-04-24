@@ -41,12 +41,6 @@ size_t file_cache::mem_used()
 
 bool file_cache::enough_free(size_t needed)
 {
-    // TODO Change types?
-    logger.log(msg_type::file_cache_gc)
-        << "mem_used() + needed: " << mem_used() + needed
-        << endl;
-    logger.log(msg_type::file_cache_gc)
-        << "mem_limit: " << mem_limit << endl;
     // Using + so that there is no unsigned overflow
     return mem_used() + needed <= mem_limit;
 }
@@ -57,6 +51,9 @@ void file_cache::ensure_free(size_t needed)
 
     if (!enough_free(needed))
         garbage_collect(needed);
+    else
+        logger.log(msg_type::file_cache_gc)
+            << "enough memory in cache, not running gc." << endl;
 }
 
 void file_cache::garbage_collect(size_t needed)
@@ -91,6 +88,7 @@ void file_cache::garbage_collect(size_t needed)
         if (!item->in_use)
             queue.insert(i);
         else
+            // TODO Add id member to cache_item?
             logger.log(t)
                 << node_id(*item->node) << "in use, will not remove." << endl;
     }

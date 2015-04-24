@@ -12,8 +12,11 @@ const int server_max_threads = 5;
 
 /*
  * Maximum size of cache's buffers in bytes.
- * Cache can grow bigger than this amount if all files in it are being used
- * at the time of garbage collection.
+ * Cache can grow bigger than this amount if e.g.
+ *   a file is bigger than the size limit
+ * or
+ *   when all files in the cache are being used
+ *   at the time of garbage collection.
  */
 const size_t max_cache_size = 20*1024*1024;
 

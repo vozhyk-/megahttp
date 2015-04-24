@@ -7,6 +7,7 @@
 #include "mega_client.h"
 #include "streaming_listener.h"
 #include "file_cache.h"
+#include "usage_counter.h"
 
 
 class file_cache;
@@ -38,13 +39,15 @@ public:
     void append_data(char *data, size_t size);
     ssize_t get_chunk(size_t start, size_t max_size, char *&result);
 
+    // Updates "last used" timestamp
     void update_last_used();
 
     node_ptr node;
     int64_t full_size;
     bool downloading;
-    bool in_use {}; // TODO change value
-    interval_clock::time_point last_used {}; // TODO change value
+
+    usage_counter in_use;
+    interval_clock::time_point last_used; // TODO change value
 
     // Memory allocated for the buffer
     size_t mem_used();

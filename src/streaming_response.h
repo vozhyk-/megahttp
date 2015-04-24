@@ -25,11 +25,16 @@ public:
           cached{file_cache(move(node), api)},
           id{logging::node_id(*cached.node)}
     {
+        ++cached.in_use;
     }
+
+    ~response_callback()
+   {
+       --cached.in_use;
+   }
 
     ssize_t operator()(char *out_buf, size_t max_size);
 
-    ~response_callback() {}
 };
 
 #endif // FILE_RESPONSE_H
