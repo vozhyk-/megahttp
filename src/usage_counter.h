@@ -13,7 +13,7 @@ class usage_counter
     int value {0};
 
     template<typename function>
-    result_type<function> with_lock(function f)
+    auto with_lock(function f) -> decltype(f())
     {
         std::unique_lock<std::mutex> l {mutex};
         return f();
