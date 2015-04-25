@@ -18,7 +18,7 @@ const int server_max_threads = 5;
  *   when all files in the cache are being used
  *   at the time of garbage collection.
  */
-const size_t max_cache_size = 20*1024*1024;
+const size_t max_cache_size = 100*1024*1024;
 
 const string log_file = "megahttp.log";
 // Types of messages that should be logged
