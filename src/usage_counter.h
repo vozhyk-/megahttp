@@ -3,8 +3,6 @@
 
 #include <mutex>
 
-#include "function_traits.h"
-
 
 // Used to count current users of a resource.
 class usage_counter
