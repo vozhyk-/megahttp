@@ -63,17 +63,14 @@ void file_cache::garbage_collect(size_t needed)
     auto less_recently_used =
         [](map_iter x, map_iter y)
     {
-        return x->second->last_used < y->second->last_used;
+        auto &item_x = x->second;
+        auto &item_y = y->second;
+        return item_x->last_used < item_y->last_used;
     };
-
-    using fun_pointer = bool(*)(map_iter, map_iter);
 
     // Is going to hold items in least-recently-used-first order.
     // (Set of map_iter's with less_recently_used comparator)
-    set<map_iter,
-        decltype(static_cast<fun_pointer>(
-                     less_recently_used))>
-       queue;
+    set<map_iter, typeof(less_recently_used)> queue {less_recently_used};
 
     const auto t = msg_type::file_cache_gc;
     logger.log(t)
