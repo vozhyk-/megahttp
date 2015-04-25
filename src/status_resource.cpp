@@ -74,7 +74,9 @@ void status_resource::print_cache_stats(ostringstream &res)
     }
     res << "</table>" << endl;
 
-    res << "<p>Total memory used: " << file_cache.mem_used() << "</p>" << endl;
+    res << "<p>Total memory used (by cache): "
+        << file_cache.mem_used()
+        << "</p>" << endl;
 }
 
 void status_resource::render_GET(const http_request &req,

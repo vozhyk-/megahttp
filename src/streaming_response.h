@@ -32,7 +32,7 @@ public:
    {
        /* Updating only now because
         * last-used-time of items that are in use
-        * is not considered
+        * is not considered by gc
         */
        cached.update_last_used();
        --cached.in_use;
