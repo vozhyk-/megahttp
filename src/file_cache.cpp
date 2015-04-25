@@ -41,6 +41,12 @@ size_t file_cache::mem_used()
 
 bool file_cache::enough_free(size_t needed)
 {
+    logger.log(msg_type::file_cache_gc)
+        << "checking free: used " << mem_used()
+        << " needed " << needed
+        << " sum " << mem_used() + needed
+        << " limit " << mem_limit
+        << endl;
     // Using + so that there is no unsigned overflow
     return mem_used() + needed <= mem_limit;
 }
@@ -91,6 +97,7 @@ void file_cache::garbage_collect(size_t needed)
     }
 
     size_t freed = 0;
+    int count = 0;
     // Remove items from cache until (freed enough) or (end of queue)
     for (auto i : queue)
     {
@@ -98,18 +105,21 @@ void file_cache::garbage_collect(size_t needed)
         size_t to_free {item->mem_used()};
 
         logger.log(t)
-            << node_id(*item->node)
+            << "[" << count << "] " << node_id(*item->node)
             << "freeing " << to_free << " bytes"
             << endl;
 
         items.erase(i);
         freed += to_free;
+        count++;
         if (enough_free(needed))
             return;
     }
 
     logger.log(t)
-        << "freed " << freed << " bytes." << endl;
+        << "removed " << count << " items,"
+        << " freed " << freed << " bytes."
+        << endl;
     logger.log(t)
         << "used now: " << mem_used() << endl;
 }
