@@ -21,11 +21,9 @@ namespace logging
 
     void log_headers(const http_request &req)
     {
-        const auto t = msg_type::request_info;
+        const auto t = msg_type::request_headers;
         if (logger.will_log(t))
         {
-            logger.log(t) << "Headers:" << endl;
-
             map<string, string, header_comparator> headers;
             req.get_headers(headers);
             for (auto i : headers)

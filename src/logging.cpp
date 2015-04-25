@@ -14,6 +14,7 @@ namespace logging
         { msg_type::mega_msg, "mega" },
         { msg_type::mega_msg_source_location, "UNDEFINED" },
         { msg_type::request_info, "request" },
+        { msg_type::request_headers, "request header" },
         { msg_type::login_request_path, "request path" },
         { msg_type::response_msg, "response" },
         { msg_type::file_info, "file info" },

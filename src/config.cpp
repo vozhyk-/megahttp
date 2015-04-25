@@ -41,6 +41,9 @@ logger::logged_types_map logged_types
     // file cache's garbage collector working details
     { msg_type::file_cache_gc, true },
 
+    // headers of HTTP requests
+    // warning: if enabled, authorization data is logged too
+    { msg_type::request_headers, false },
     // chunks returned to HTTP client (a lot of output)
     { msg_type::response_data, false },
     // chunks downloaded from MEGA    (a lot of output)

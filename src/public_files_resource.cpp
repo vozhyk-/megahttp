@@ -19,10 +19,9 @@ http_response *public_files_resource::make_GET_response(const http_request &req)
 {
     string mega_url = req.get_arg("url");
 
-    // Log request info
-    const auto t = msg_type::request_info;
-    if (logger.will_log(t))
-        logger.log(t) << "url: " << mega_url << endl;
+    /* Log request info */
+    logger.log(msg_type::request_info)
+        << "url: " << mega_url << endl;
 
     log_headers(req);
 

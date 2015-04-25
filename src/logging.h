@@ -19,6 +19,7 @@ namespace logging
         mega_msg,
         mega_msg_source_location,
         request_info,
+        request_headers,
         login_request_path,
         response_msg,
         file_info,
