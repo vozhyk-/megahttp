@@ -30,6 +30,11 @@ public:
 
     ~response_callback()
    {
+       /* Updating only now because
+        * last-used-time of items that are in use
+        * is not considered
+        */
+       cached.update_last_used();
        --cached.in_use;
    }
 

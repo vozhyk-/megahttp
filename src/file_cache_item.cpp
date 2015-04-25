@@ -43,6 +43,12 @@ void file_cache_item::append_data(char *data, size_t size)
     buffer.insert(buffer.end(), data, data + size);
 }
 
+void file_cache_item::update_last_used()
+{
+    // TODO use locking
+    last_used = interval_clock::now();
+}
+
 /*
  * Returns:
  *   the number of bytes available, or
