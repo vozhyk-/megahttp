@@ -50,14 +50,14 @@ void status_resource::print_cache_stats(ostringstream &res)
     res << "<h2>Cache statistics</h2>" << endl;
 
     res << "<table>" << endl
-        << "<th>"
-        << " <td>Handle</td>"
-        << " <td>In use by</td>"
-        << " <td>Filename</td>"
-        << " <td>File size</td>"
-        << " <td>Memory used</td>"
-        << " <td>Downloaded</td>"
-        << "</th>" << endl;
+        << "<tr>"
+        << " <th>Handle</th>"
+        << " <th>In use by</th>"
+        << " <th>Filename</th>"
+        << " <th>File size</th>"
+        << " <th>Memory used</th>"
+        << " <th>Downloaded</th>"
+        << "</tr>" << endl;
     for (auto &i : file_cache.items)
     {
         auto &item = i.second;
