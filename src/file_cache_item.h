@@ -5,7 +5,7 @@
 #include <chrono>
 
 #include "mega_client.h"
-#include "streaming_listener.h"
+#include "download_listener.h"
 #include "file_cache.h"
 #include "usage_counter.h"
 
@@ -14,7 +14,7 @@ class file_cache;
 
 class file_cache_item
 {
-    friend class streaming_listener;
+    friend class download_listener;
 
     class file_cache &cache;
 
@@ -22,7 +22,7 @@ class file_cache_item
 
     std::vector<char> buffer;
 
-    streaming_listener mega_transfer_listener;
+    download_listener mega_transfer_listener;
 
     void start_download();
     void start_download(size_t start, size_t size);

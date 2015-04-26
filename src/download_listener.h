@@ -1,19 +1,19 @@
-#ifndef STREAMING_LISTENER_H
-#define STREAMING_LISTENER_H
+#ifndef DOWNLOAD_LISTENER_H
+#define DOWNLOAD_LISTENER_H
 
 #include <megaapi.h>
 
 
 class file_cache_item;
 
-class streaming_listener : public mega::MegaTransferListener
+class download_listener : public mega::MegaTransferListener
 {
     file_cache_item &cache_item;
 
     std::string id;
 
 public:
-    streaming_listener(file_cache_item &cache_item);
+    download_listener(file_cache_item &cache_item);
 
     virtual void onTransferStart(mega::MegaApi *, mega::MegaTransfer *);
     virtual void onTransferUpdate(mega::MegaApi *, mega::MegaTransfer *);
@@ -22,4 +22,4 @@ public:
                                   mega::MegaError *);
 };
 
-#endif // STREAMING_LISTENER_H
+#endif // DOWNLOAD_LISTENER_H

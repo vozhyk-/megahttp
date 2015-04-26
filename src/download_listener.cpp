@@ -1,4 +1,4 @@
-#include "streaming_listener.h"
+#include "download_listener.h"
 
 #include <iostream>
 
@@ -12,13 +12,13 @@ using namespace mega;
 
 using namespace logging;
 
-streaming_listener::streaming_listener(file_cache_item &cache_item)
+download_listener::download_listener(file_cache_item &cache_item)
     : cache_item{cache_item}
 {
 }
 
-void streaming_listener::onTransferStart(MegaApi *api,
-                                         MegaTransfer *transfer)
+void download_listener::onTransferStart(MegaApi *api,
+                                        MegaTransfer *transfer)
 {
     id = node_id(*cache_item.node);
 
@@ -27,8 +27,8 @@ void streaming_listener::onTransferStart(MegaApi *api,
         << "starting" << endl;
 }
 
-void streaming_listener::onTransferUpdate(MegaApi *api,
-                                          MegaTransfer *transfer)
+void download_listener::onTransferUpdate(MegaApi *api,
+                                         MegaTransfer *transfer)
 {
     auto size = transfer->getDeltaSize();
     char *data = transfer->getLastBytes();
@@ -42,9 +42,9 @@ void streaming_listener::onTransferUpdate(MegaApi *api,
         << endl;
 }
 
-void streaming_listener::onTransferFinish(MegaApi *api,
-                                          MegaTransfer *transfer,
-                                          MegaError *err)
+void download_listener::onTransferFinish(MegaApi *api,
+                                         MegaTransfer *transfer,
+                                         MegaError *err)
 {
     // TODO look at err
     cache_item.downloading = false;
