@@ -4,28 +4,19 @@
 #include "config.h"
 
 #include <thread>
+#include <future>
 
 template<typename result_type> class result_listener
 {
-public:
-    /* done and result can be set from outside. Make private? */
-    bool done;
-    result_type result;
+protected:
+    std::promise<result_type> promise;
 
-    result_listener()
-    {
-        done = false;
-        result = {};
-    }
+public:
+    /* Subclass must set promise's value at some point */
 
     result_type wait_for_result()
     {
-        while (!done)
-        {
-            std::this_thread::sleep_for(mega_request_sleep);
-        }
-
-        return move(result);
+        return move(promise.get_future().get());
     }
 };
 

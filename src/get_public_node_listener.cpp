@@ -4,7 +4,7 @@ using namespace std;
 using namespace mega;
 
 
-void get_public_node_listener::onRequestFinish(MegaApi *api,
+void get_public_node_listener::onRequestFinish(MegaApi *,
                                                MegaRequest *request,
                                                MegaError *err)
 {
@@ -15,8 +15,8 @@ void get_public_node_listener::onRequestFinish(MegaApi *api,
         new MegaError(*err));
 
     if (error->getErrorCode() == MegaError::API_OK)
-        result = unique_ptr<MegaNode>{
-            request->getPublicMegaNode()};
-
-    done = true;
+        promise.set_value(unique_ptr<MegaNode>{
+                request->getPublicMegaNode()});
+    else
+        promise.set_value(nullptr);
 }
