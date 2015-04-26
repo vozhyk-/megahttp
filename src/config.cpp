@@ -54,5 +54,4 @@ logger::logged_types_map logged_types
 int mega_log_level = MegaApi::LOG_LEVEL_INFO;
 
 /* Time to wait before checking the state again */
-const auto mega_request_sleep = chrono::milliseconds(200);
 const auto http_response_sleep = chrono::milliseconds(200);
