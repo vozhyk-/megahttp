@@ -39,7 +39,6 @@ public:
    }
 
     ssize_t operator()(char *out_buf, size_t max_size);
-
 };
 
 #endif // FILE_RESPONSE_H

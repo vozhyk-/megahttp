@@ -9,7 +9,7 @@ file_cache_item::file_cache_item(unique_ptr<MegaNode> node,
                                  class file_cache &cache)
     : mega_api{api}, cache{cache}, node{move(node)},
       full_size{this->node->getSize()},
-      downloading(false), mega_transfer_listener(*this)
+      downloading(false), download_listener(*this)
 {
     /*
      * TODO ensure nobody else does the same at this time.
@@ -34,13 +34,15 @@ void file_cache_item::start_download()
 
 void file_cache_item::start_download(size_t start, size_t size)
 {
-    mega_api.startStreaming(node.get(), start, size, &mega_transfer_listener);
+    mega_api.startStreaming(node.get(), start, size, &download_listener);
     downloading = true;
 }
 
 void file_cache_item::append_data(char *data, size_t size)
 {
     buffer.insert(buffer.end(), data, data + size);
+
+    download_cond.notify_all();
 }
 
 void file_cache_item::update_last_used()
@@ -55,9 +57,12 @@ void file_cache_item::update_last_used()
  *    0, if the chunk is not downloaded yet,
  *   -1, if the chunk is past the end of file,
  *   -2, if the chunk couldn't be downloaded because of an error
+ *       (NOT IMPLEMENTED)
  * Sets result to address of chunk, or to nullptr if return value <= 0
  */
-ssize_t file_cache_item::get_chunk(size_t start, size_t max_size, char *&result)
+ssize_t file_cache_item::get_chunk_immediately(size_t start,
+                                               size_t max_size,
+                                               char *&result)
 {
     if (start >= buffer.size())
     {
@@ -77,6 +82,36 @@ ssize_t file_cache_item::get_chunk(size_t start, size_t max_size, char *&result)
         }
     }
 
+    return get_buffer_chunk(start, max_size, result);
+}
+
+/*
+ * Get a chunk of cached file.
+ * Blocks, returns only when data available.
+ * @return The return value of get_chunk_immediately (but without 0)
+ * result is set to the value get_chunk_immediately sets it to.
+ */
+ssize_t file_cache_item::get_chunk(size_t start,
+                                   size_t max_size,
+                                   char *&result)
+{
+    ssize_t size;
+    while (!(size = get_chunk_immediately(start, max_size, result)))
+        wait_for_download();
+
+    return size;
+}
+
+void file_cache_item::wait_for_download()
+{
+    unique_lock<mutex> lock{download_cond_mutex};
+    download_cond.wait(lock);
+}
+
+ssize_t file_cache_item::get_buffer_chunk(size_t start,
+                                          size_t max_size,
+                                          char *&result)
+{
     result = buffer.data() + start;
 
     return min(max_size, buffer.size() - start);

@@ -17,8 +17,8 @@ download_listener::download_listener(file_cache_item &cache_item)
 {
 }
 
-void download_listener::onTransferStart(MegaApi *api,
-                                        MegaTransfer *transfer)
+void download_listener::onTransferStart(MegaApi *,
+                                        MegaTransfer *)
 {
     id = node_id(*cache_item.node);
 
@@ -27,7 +27,7 @@ void download_listener::onTransferStart(MegaApi *api,
         << "starting" << endl;
 }
 
-void download_listener::onTransferUpdate(MegaApi *api,
+void download_listener::onTransferUpdate(MegaApi *,
                                          MegaTransfer *transfer)
 {
     auto size = transfer->getDeltaSize();
@@ -42,8 +42,8 @@ void download_listener::onTransferUpdate(MegaApi *api,
         << endl;
 }
 
-void download_listener::onTransferFinish(MegaApi *api,
-                                         MegaTransfer *transfer,
+void download_listener::onTransferFinish(MegaApi *,
+                                         MegaTransfer *,
                                          MegaError *err)
 {
     // TODO look at err

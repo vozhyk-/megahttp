@@ -22,10 +22,18 @@ class file_cache_item
 
     std::vector<char> buffer;
 
-    download_listener mega_transfer_listener;
+    class download_listener download_listener;
+
+    std::condition_variable download_cond;
+    std::mutex download_cond_mutex;
+
+    ssize_t get_chunk_immediately(size_t start, size_t max_size, char *&result);
+    ssize_t get_buffer_chunk(size_t start, size_t max_size, char *&result);
 
     void start_download();
     void start_download(size_t start, size_t size);
+
+    void wait_for_download();
 
 public:
     using node_ptr = std::unique_ptr<mega::MegaNode>;
@@ -37,6 +45,7 @@ public:
     ~file_cache_item();
 
     void append_data(char *data, size_t size);
+    // Maybe returning a pair<ssize_t, char *> is a better idea?
     ssize_t get_chunk(size_t start, size_t max_size, char *&result);
 
     // Updates "last used" timestamp

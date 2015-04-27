@@ -25,20 +25,16 @@ ssize_t response_callback::operator()(char *out_buf, size_t max_size)
         << ", data " << (void *)data
         << endl;
 
-    if (to_copy > 0) // we got data
-    {
-        memcpy(out_buf, data, to_copy);
-        file_offset += to_copy;
-    }
-    else if (to_copy == 0) // data not available yet
-    {
-        this_thread::sleep_for(http_response_sleep);
-    }
-    else if (to_copy == -1) // end of stream
+    if (to_copy == -1) // end of stream
     {
         logger.log(msg_type::response_status)
             << id
             << "finished." << endl;
+    }
+    else // we got data
+    {
+        memcpy(out_buf, data, to_copy);
+        file_offset += to_copy;
     }
 
     return to_copy;
