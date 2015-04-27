@@ -8,6 +8,9 @@
 
 template<typename result_type> class result_listener
 {
+    result_type result;
+    bool done = false;
+
 protected:
     std::promise<result_type> promise;
 
@@ -16,7 +19,13 @@ public:
 
     result_type wait_for_result()
     {
-        return move(promise.get_future().get());
+        if (!done)
+        {
+            result = promise.get_future().get();
+            done = true;
+        }
+
+        return move(result);
     }
 };
 
