@@ -18,7 +18,7 @@ using namespace logging;
 http_response *account_files_resource::make_GET_response(
     const http_request &req)
 {
-    /*
+    /*!
      * Example URL:
      *
      * http://server/email@example.com/some/file

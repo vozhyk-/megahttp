@@ -4,7 +4,7 @@
 #include <mutex>
 
 
-// Used to count current users of a resource.
+/// Used to count current users of a resource.
 class usage_counter
 {
     std::mutex mutex;
@@ -20,14 +20,14 @@ class usage_counter
 public:
     usage_counter() {}
 
-    // @return the value of the counter
+    /// @return the value of the counter
     int get()
     {
         return with_lock([&](){
                 return value;
             });
     }
-    // @return true if the resource is in use
+    /// @return true if the resource is in use
     operator bool() { return get(); }
 
     usage_counter &operator++()

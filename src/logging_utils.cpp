@@ -12,8 +12,11 @@ using namespace logging;
 
 namespace logging
 {
-    // @return string for identifying a node in log output
-    // not const because .getBase64Handle() is not
+    /*!
+     * @return string for identifying a node in log output
+     *
+     * Not const because .getBase64Handle() is not
+     */
     string node_id(MegaNode &node)
     {
         return "(" + string{node.getBase64Handle()} + ") ";

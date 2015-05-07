@@ -51,15 +51,6 @@ void file_cache_item::update_last_used()
     last_used = interval_clock::now();
 }
 
-/*
- * Returns:
- *   the number of bytes available, or
- *    0, if the chunk is not downloaded yet,
- *   -1, if the chunk is past the end of file,
- *   -2, if the chunk couldn't be downloaded because of an error
- *       (NOT IMPLEMENTED)
- * Sets result to address of chunk, or to nullptr if return value <= 0
- */
 ssize_t file_cache_item::get_chunk_immediately(size_t start,
                                                size_t max_size,
                                                char *&result)
@@ -85,12 +76,6 @@ ssize_t file_cache_item::get_chunk_immediately(size_t start,
     return get_buffer_chunk(start, max_size, result);
 }
 
-/*
- * Get a chunk of cached file.
- * Blocks, returns only when data available.
- * @return The return value of get_chunk_immediately (but without 0)
- * result is set to the value get_chunk_immediately sets it to.
- */
 ssize_t file_cache_item::get_chunk(size_t start,
                                    size_t max_size,
                                    char *&result)

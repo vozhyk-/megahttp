@@ -23,12 +23,17 @@ class file_cache
     void garbage_collect(size_t needed);
 
 public:
-    file_cache_item &operator()(std::unique_ptr<mega::MegaNode>,
+    /*!
+     * \brief Get an item for `node` from the cache
+     *
+     * Creates a new item if there isn't one already.
+     */
+    file_cache_item &operator()(std::unique_ptr<mega::MegaNode> node,
                                 mega::MegaApi &);
 
-    // Memory used by file_cache_items' buffers
+    /// Memory used by file_cache_items' buffers
     size_t mem_used();
-    // Ensure mem_used is `needed` bytes below mem_limit
+    /// Ensure mem_used is `needed` bytes below mem_limit
     // Change void to bool in the future?
     void ensure_free(size_t needed);
 

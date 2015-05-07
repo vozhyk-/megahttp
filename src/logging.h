@@ -9,7 +9,10 @@
 
 namespace logging
 {
-    /* To add a new msg_type:
+    /*!
+     * Log message type. Used to determine whether to log a given message.
+     *
+     * To add a new msg_type:
      *   add it to this enum
      *   add its description to logging.cpp:type_description
      *   add an option for it in config.cpp:logged_types
@@ -39,6 +42,12 @@ namespace logging
 
         logger(logged_types_map &logged_types) : logged(logged_types) {}
 
+        /*!
+         * \brief Get a stream to log a message of `msg_type` to.
+         *
+         * @return A normal ostream or a null_ostream in case
+         *         the message isn't supposed to be logged.
+         */
         std::ostream &log(msg_type type);
         bool will_log(msg_type type);
     private:
