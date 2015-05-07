@@ -18,18 +18,26 @@ Start the server with
 bin/megahttp
 ```
 
-Log into your MEGA account using HTTP Basic authentication at `http://localhost:8080/login/your@email`. Then point a browser or any other HTTP client to
+Log into your MEGA account using HTTP Basic authentication
+at `http://localhost:8080/login/your@email`.
+Then point a browser or any other HTTP client to
 ```
 http://localhost:8080/your@email/path/to/file
 ```
 
 Or you can use publicly-shared files without logging in:
 ```
-http://localhost:8080/public/?url=MEGA_URL
+http://localhost:8080/public?url=MEGA_URL
 ```
 where MEGA_URL is a public link to the file (with the key built-in).
 
 Logs are written to `megahttp.log` in the current directory by default.
+
+There is a status page, where you can currently see some information
+about cached files and memory usage:
+```
+http://localhost:8080/status
+```
 
 Configuration
 -------------
