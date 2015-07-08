@@ -34,3 +34,7 @@ target_link_libraries(megahttp
   ${LIBHTTPSERVER_LIBRARIES}
   ${LIBMEGA_LIBRARIES}
   )
+
+
+install(TARGETS megahttp
+  RUNTIME DESTINATION bin)
