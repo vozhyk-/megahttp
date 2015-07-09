@@ -13,7 +13,7 @@ EGIT_REPO_URI="git://github.com/vozhyk-/megahttp"
 LICENSE="BSD-2"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="debug"
+IUSE=""
 
 RDEPEND=">net-misc/mega-sdk-2.5.0
          net-libs/libhttpserver"
