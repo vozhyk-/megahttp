@@ -9,6 +9,7 @@ cmake .
 make
 make doc # If you want to generate documentation for the source with doxygen
 make tests # If you want to build some tests of the libraries used
+make install # To install the server
 ```
 
 Usage
