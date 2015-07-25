@@ -4,6 +4,7 @@
 // for int types
 #include <megaapi.h>
 #include <unordered_map>
+#include <mutex>
 
 #include "config.h"
 
@@ -14,10 +15,13 @@ class file_buffer
 {
     struct block : public std::vector<char>
     {
-        block(size_t size) { /* TODO reserve memory */ }
+        block(size_t size);
+        ~block();
     };
 
     std::unordered_map<int, block> blocks;
+
+    std::mutex blocks_mutex;
     block &get_block(int block_num, size_t block_size);
 
     template<typename function>
@@ -26,7 +30,7 @@ class file_buffer
 
     class file_cache &cache;
 
-    int64_t current_size;
+    int64_t current_size{0};
     int64_t full_size;
 
 public:

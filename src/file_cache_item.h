@@ -19,7 +19,7 @@ class file_cache_item
 
     mega::MegaApi &mega_api;
 
-    file_buffer buffer;
+    std::unique_ptr<file_buffer> buffer;
 
     class download_listener download_listener;
 

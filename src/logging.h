@@ -30,6 +30,7 @@ namespace logging
         response_data,
         download_status,
         download_data,
+        file_buffer_blocks,
         file_cache_gc,
     };
 

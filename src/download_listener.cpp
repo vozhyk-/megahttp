@@ -38,7 +38,7 @@ void download_listener::onTransferUpdate(MegaApi *,
     logger.log(msg_type::download_data)
         << id
         << "size " << size
-        << ", new buffer size: " << cache_item.buffer.size()
+        << ", new buffer size: " << cache_item.buffer->size()
         << endl;
 }
 

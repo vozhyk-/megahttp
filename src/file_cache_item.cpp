@@ -10,8 +10,10 @@ file_cache_item::file_cache_item(unique_ptr<MegaNode> node,
     : mega_api{api}, node{move(node)},
       full_size{this->node->getSize()},
       downloading{false},
-      buffer(full_size, cache), download_listener(*this)
+      download_listener(*this)
 {
+    buffer = unique_ptr<file_buffer>(
+        new file_buffer(full_size, cache));
 }
 
 file_cache_item::~file_cache_item()
@@ -32,7 +34,10 @@ void file_cache_item::start_download(size_t start, size_t size)
 
 void file_cache_item::append_data(char *data, size_t size)
 {
-    buffer.append_data(data, size);
+    {
+        unique_lock<mutex> lock{download_cond_mutex};
+        buffer->append_data(data, size);
+    }
 
     download_cond.notify_all();
 }
@@ -47,7 +52,7 @@ ssize_t file_cache_item::get_data_immediately(size_t start,
                                               size_t max_size,
                                               char *dest)
 {
-    if (start >= buffer.size())
+    if (start >= buffer->size())
     {
         if (start >= full_size)
         {
@@ -63,7 +68,7 @@ ssize_t file_cache_item::get_data_immediately(size_t start,
         }
     }
 
-    return buffer.get_data(start, max_size, dest);
+    return buffer->get_data(start, max_size, dest);
 }
 
 ssize_t file_cache_item::get_data(size_t start,
@@ -85,10 +90,10 @@ void file_cache_item::wait_for_download()
 
 size_t file_cache_item::mem_used()
 {
-    return buffer.mem_used();
+    return buffer->mem_used();
 }
 
 size_t file_cache_item::have_bytes()
 {
-    return buffer.size();
+    return buffer->size();
 }

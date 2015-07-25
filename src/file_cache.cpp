@@ -68,72 +68,72 @@ void file_cache::ensure_free(size_t needed)
 
 void file_cache::garbage_collect(size_t needed)
 {
-    using map_iter = items_type::const_iterator;
+    // using map_iter = items_type::const_iterator;
 
-    auto less_recently_used =
-        [](map_iter x, map_iter y)
-    {
-        auto &item_x = x->second;
-        auto &item_y = y->second;
-        /* <= used so that items with equal last_used
-         * are placed into queue too
-         */
-        return item_x->last_used <= item_y->last_used;
-    };
+    // auto less_recently_used =
+    //     [](map_iter x, map_iter y)
+    // {
+    //     auto &item_x = x->second;
+    //     auto &item_y = y->second;
+    //     /* <= used so that items with equal last_used
+    //      * are placed into queue too
+    //      */
+    //     return item_x->last_used <= item_y->last_used;
+    // };
 
-    // Is going to hold items in least-recently-used-first order.
-    // (Set of map_iter's with less_recently_used comparator)
-    set<map_iter, typeof(less_recently_used)> queue {less_recently_used};
+    // // Is going to hold items in least-recently-used-first order.
+    // // (Set of map_iter's with less_recently_used comparator)
+    // set<map_iter, typeof(less_recently_used)> queue {less_recently_used};
 
     const auto t = msg_type::file_cache_gc;
     logger.log(t)
         << "started." << endl;
 
-    logger.log(t) << "checking " << items.size() << " items" << endl;
+    // logger.log(t) << "checking " << items.size() << " items" << endl;
 
-    // Put all items not in use into queue
-    for (map_iter i = items.begin(); i != items.end(); ++i)
-    {
-        auto &item = i->second;
-        if (!item->in_use)
-            queue.insert(i);
-        else
-            // TODO Add id member to cache_item?
-            logger.log(t)
-                << node_id(*item->node) << "in use, will not remove." << endl;
-    }
+    // // Put all items not in use into queue
+    // for (map_iter i = items.begin(); i != items.end(); ++i)
+    // {
+    //     auto &item = i->second;
+    //     if (!item->in_use)
+    //         queue.insert(i);
+    //     else
+    //         // TODO Add id member to cache_item?
+    //         logger.log(t)
+    //             << node_id(*item->node) << "in use, will not remove." << endl;
+    // }
 
-    logger.log(t) << queue.size() << " items not in use, can be removed"
-                  << endl;
+    // logger.log(t) << queue.size() << " items not in use, can be removed"
+    //               << endl;
 
-    size_t freed = 0;
-    int count = 0;
-    // Remove items from cache until (freed enough) or (end of queue)
-    for (auto i : queue)
-    {
-        auto &item = i->second;
-        size_t to_free {item->mem_used()};
+    // size_t freed = 0;
+    // int count = 0;
+    // // Remove items from cache until (freed enough) or (end of queue)
+    // for (auto i : queue)
+    // {
+    //     auto &item = i->second;
+    //     size_t to_free {item->mem_used()};
 
-        logger.log(t)
-            << "[" << count << "] " << node_id(*item->node)
-            << "freeing " << to_free << " bytes"
-            << endl;
+    //     logger.log(t)
+    //         << "[" << count << "] " << node_id(*item->node)
+    //         << "freeing " << to_free << " bytes"
+    //         << endl;
 
-        items.erase(i);
-        freed += to_free;
-        count++;
-        if (enough_free(needed))
-        {
-            logger.log(t)
-                << "freed enough memory." << endl;
-            break;
-        }
-    }
+    //     items.erase(i);
+    //     freed += to_free;
+    //     count++;
+    //     if (enough_free(needed))
+    //     {
+    //         logger.log(t)
+    //             << "freed enough memory." << endl;
+    //         break;
+    //     }
+    // }
 
-    logger.log(t)
-        << "removed " << count << " items,"
-        << " freed " << freed << " bytes."
-        << endl;
+    // logger.log(t)
+    //     << "removed " << count << " items,"
+    //     << " freed " << freed << " bytes."
+    //     << endl;
     logger.log(t)
         << "used now: " << mem_used() << endl;
 }
