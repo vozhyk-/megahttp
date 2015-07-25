@@ -12,7 +12,7 @@
 
 class file_cache
 {
-    friend class file_cache_item;
+    friend class file_buffer; // for modifying buf_mem_used
 
     std::mutex gc_mutex;
 

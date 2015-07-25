@@ -8,7 +8,7 @@ using namespace std;
 
 namespace logging
 {
-    // not adding const because no operator[] for it
+    // not const because no operator[] for it
     map<msg_type, string> type_description
     {
         { msg_type::mega_msg, "mega" },

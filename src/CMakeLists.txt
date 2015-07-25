@@ -25,6 +25,7 @@ add_executable(megahttp
   get_public_node_listener.cpp
   file_cache.cpp
   file_cache_item.cpp
+  file_buffer.cpp
   download_listener.cpp
   streaming_response.cpp
   )

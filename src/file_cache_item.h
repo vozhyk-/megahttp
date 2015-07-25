@@ -7,6 +7,7 @@
 #include "mega_client.h"
 #include "download_listener.h"
 #include "file_cache.h"
+#include "file_buffer.h"
 #include "usage_counter.h"
 
 
@@ -16,11 +17,9 @@ class file_cache_item
 {
     friend class download_listener;
 
-    class file_cache &cache;
-
     mega::MegaApi &mega_api;
 
-    std::vector<char> buffer;
+    file_buffer buffer;
 
     class download_listener download_listener;
 
@@ -37,7 +36,6 @@ class file_cache_item
      * Sets result to address of chunk, or to nullptr if return value <= 0
      */
     ssize_t get_chunk_immediately(size_t start, size_t max_size, char *&result);
-    ssize_t get_buffer_chunk(size_t start, size_t max_size, char *&result);
 
     void start_download();
     void start_download(size_t start, size_t size);
