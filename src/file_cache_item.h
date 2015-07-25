@@ -28,14 +28,14 @@ class file_cache_item
 
     /*!
      * @return
-     *   the number of bytes available, or
+     *   the number of bytes copied, or
      *    0, if the chunk is not downloaded yet,
      *   -1, if the chunk is past the end of file,
      *   -2, if the chunk couldn't be downloaded because of an error
      *       (NOT IMPLEMENTED)
-     * Sets result to address of chunk, or to nullptr if return value <= 0
+     * Copies data into dest if return value > 0
      */
-    ssize_t get_chunk_immediately(size_t start, size_t max_size, char *&result);
+    ssize_t get_data_immediately(size_t start, size_t max_size, char *dest);
 
     void start_download();
     void start_download(size_t start, size_t size);
@@ -56,11 +56,10 @@ public:
      * Get a chunk of cached file.
      * Blocks, returns only when data available.
      *
-     * @return The return value of get_chunk_immediately (but without 0)
-     * result is set to the value get_chunk_immediately sets it to.
+     * @return The return value of get_chunk_immediately (but without 0).
+     * Copies the chunk into dest.
      */
-    // Maybe returning a pair<ssize_t, char *> is a better idea?
-    ssize_t get_chunk(size_t start, size_t max_size, char *&result);
+    ssize_t get_data(size_t start, size_t max_size, char *dest);
 
     /// Updates "last used" timestamp
     void update_last_used();

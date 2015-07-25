@@ -26,17 +26,53 @@ file_buffer::~file_buffer()
     cache.buf_mem_used -= full_size;
 }
 
-ssize_t file_buffer::get_chunk(size_t start,
-                                   size_t max_size,
-                                   char *&result)
+/*!
+ * Returns the block_num'th block if it exists,
+ * otherwise creates it first
+ * (with given size)
+ */
+file_buffer::block &file_buffer::get_block(int block_num, size_t size)
 {
-    result = buffer.data() + start;
+    auto found = blocks.find(block_num);
 
-    return min(max_size, buffer.size() - start);
+    if (found != blocks.end())
+    {
+        return found->second;
+    }
+    else
+    {
+        auto i = blocks.insert(make_pair(block_num, block{size}));
+        return i.first->second;
+    }
+}
+
+ssize_t file_buffer::get_data(size_t start,
+                              size_t max_size,
+                              char *dest)
+{
+    // result = buffer.data() + start;
+
+    // return min(max_size, buffer.size() - start);
+    return 0;
 }
 
 
 void file_buffer::append_data(char *data, size_t size)
 {
-    buffer.insert(buffer.end(), data, data + size);
+    size_t remaining = size;
+    size_t buffer_pos = current_size;
+    while (remaining > 0)
+    {
+        int bl_num = buffer_pos / block_size;
+        size_t bl_size = min(block_size, full_size - buffer_pos);
+
+        block bl = get_block(bl_num, bl_size);
+        size_t to_copy = min(remaining, bl_size);
+
+        bl.insert(bl.end(), data, data + to_copy);
+
+        data += to_copy;
+        buffer_pos += to_copy;
+        remaining -= to_copy;
+    }
 }

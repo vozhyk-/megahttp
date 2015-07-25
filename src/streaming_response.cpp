@@ -14,30 +14,23 @@ using namespace logging;
 
 ssize_t response_callback::operator()(char *out_buf, size_t max_size)
 {
-    char *data;
-    ssize_t to_copy = cached.get_chunk(file_offset, max_size, data);
+    ssize_t size = cached.get_data(file_offset, max_size, out_buf);
 
     logger.log(msg_type::response_data)
         << id
         << "file_offset " << file_offset
         << ", max_size " << max_size
-        << ", to_copy " << to_copy
-        << ", data " << (void *)data
+        << ", size " << size
         << endl;
 
-    if (to_copy == -1) // end of stream
-    {
+    if (size == -1) // end of stream
         logger.log(msg_type::response_status)
             << id
             << "finished." << endl;
-    }
     else // we got data
-    {
-        memcpy(out_buf, data, to_copy);
-        file_offset += to_copy;
-    }
+        file_offset += size;
 
-    return to_copy;
+    return size;
 };
 
 http_response *make_node_response(unique_ptr<MegaNode> node, MegaApi &api)

@@ -43,14 +43,12 @@ void file_cache_item::update_last_used()
     last_used = interval_clock::now();
 }
 
-ssize_t file_cache_item::get_chunk_immediately(size_t start,
-                                               size_t max_size,
-                                               char *&result)
+ssize_t file_cache_item::get_data_immediately(size_t start,
+                                              size_t max_size,
+                                              char *dest)
 {
     if (start >= buffer.size())
     {
-        result = nullptr;
-
         if (start >= full_size)
         {
             // end-of-stream
@@ -65,15 +63,15 @@ ssize_t file_cache_item::get_chunk_immediately(size_t start,
         }
     }
 
-    return buffer.get_chunk(start, max_size, result);
+    return buffer.get_data(start, max_size, dest);
 }
 
-ssize_t file_cache_item::get_chunk(size_t start,
-                                   size_t max_size,
-                                   char *&result)
+ssize_t file_cache_item::get_data(size_t start,
+                                  size_t max_size,
+                                  char *dest)
 {
     ssize_t size;
-    while (!(size = get_chunk_immediately(start, max_size, result)))
+    while (!(size = get_data_immediately(start, max_size, dest)))
         wait_for_download();
 
     return size;

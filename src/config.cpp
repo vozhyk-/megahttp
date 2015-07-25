@@ -19,6 +19,8 @@ const int server_max_threads = 5;
  *   at the time of garbage collection.
  */
 const size_t max_cache_size = 100*1024*1024;
+/// Size of blocks into which files in cache are divided
+const size_t block_size = 4*1024;
 
 const string log_file = "megahttp.log";
 /*!
