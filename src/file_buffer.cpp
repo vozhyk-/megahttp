@@ -49,11 +49,22 @@ file_buffer::block &file_buffer::get_block(int block_num, size_t size)
     }
 }
 
+/*!
+ * Loops over blocks corresponding to
+ * buffer[buffer_pos .. buffer_pos + data_size) ,
+ * providing (block bl // current buffer block,
+ *            char *data // pointer to remaining data,
+ *            size_t bl_pos // current position inside block,
+ *            size_t to_copy // number of bytes remaining inside block
+ *                           // (block[bl_pos .. bl_pos + to_copy) )
+ *
+ * Used to copy data from or into buffer
+ */
 template<typename function>
 void file_buffer::with_blocks(char *data, size_t data_size, size_t buffer_pos,
                               function fun)
 {
-    // data, data_size will be modified on every iteration
+    // data, data_size, buffer_pos will be modified on every iteration
     while (data_size > 0)
     {
         int    bl_num = buffer_pos / block_size;
@@ -70,7 +81,6 @@ void file_buffer::with_blocks(char *data, size_t data_size, size_t buffer_pos,
              << " to_copy " << to_copy
              << endl;
 
-        //bl.insert(bl.end(), data, data + to_copy);
         fun(bl, data, bl_pos, to_copy);
 
         data += to_copy;
