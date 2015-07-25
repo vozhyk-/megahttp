@@ -20,6 +20,10 @@ class file_buffer
     std::unordered_map<int, block> blocks;
     block &get_block(int block_num, size_t block_size);
 
+    template<typename function>
+    void with_blocks(char *data, size_t data_size, size_t buffer_pos,
+                     function fun);
+
     class file_cache &cache;
 
     int64_t current_size;
