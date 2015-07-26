@@ -17,27 +17,18 @@ using namespace logging;
 file_buffer::file_buffer(int64_t full_size, class file_cache &cache)
     : cache{cache}, full_size{full_size}
 {
-    // /*
-    //  * TODO ensure nobody else does the same at this time.
-    //  *      Allow only one file_cache_item at a time to reserve memory?
-    //  */
-    // cache.ensure_free(full_size);
-
-    // buffer.reserve(full_size);
-    cache.buf_mem_used += full_size;
 }
 
 file_buffer::~file_buffer()
 {
-    cache.buf_mem_used -= full_size;
 }
 
 /*!
- * Returns the block_num'th block if it exists,
- * otherwise creates it first
+ * Returns pointer to the block_num'th block if it exists,
+ * otherwise creates the block first
  * (with given size)
  */
-file_buffer::block &file_buffer::get_block(int block_num, size_t size)
+file_buffer::block_ptr &file_buffer::get_block(int block_num, size_t size)
 {
     unique_lock<mutex> lock{blocks_mutex};
     auto found = blocks.find(block_num);
@@ -51,7 +42,8 @@ file_buffer::block &file_buffer::get_block(int block_num, size_t size)
     }
     else
     {
-        auto i = blocks.insert(make_pair(block_num, block{size}));
+        auto i = blocks.insert(make_pair(block_num,
+                                         block_ptr{new block{size, *this}}));
         // logger.log(msg_type::file_buffer_blocks)
         //     << "created block " << &i.first->second
         //     << endl;
@@ -62,14 +54,14 @@ file_buffer::block &file_buffer::get_block(int block_num, size_t size)
 /*!
  * Loops over blocks corresponding to
  * buffer[buffer_pos .. buffer_pos + data_size) ,
- * providing (block &bl // current buffer block,
+ * providing (block_ptr &bl // pointer to current buffer block,
  *            char *data // pointer to remaining data,
  *            size_t bl_pos // current position inside block,
  *            size_t to_copy // number of bytes remaining inside block
  *                           // (block[bl_pos .. bl_pos + to_copy) )
  * to the given function.
  * @param fun must be a function-like object with signature:
- * void fun(block &bl, char *data, size_t bl_pos, size_t to_copy);
+ * void fun(block_ptr &bl, char *data, size_t bl_pos, size_t to_copy);
  *
  * Used to copy data from or into buffer
  */
@@ -91,13 +83,13 @@ void file_buffer::with_blocks(char *data, size_t data_size, size_t buffer_pos,
         //      << endl;
         size_t bl_size = min(block_size, full_size - bl_num*block_size);
 
-        block &bl = get_block(bl_num, bl_size);
+        block_ptr &bl = get_block(bl_num, bl_size);
         size_t to_copy = min(data_size, bl_size - bl_pos);
 
         logger.log(msg_type::file_buffer_blocks)
             << "with_blocks:"
             << " bl_num " << bl_num
-            << " bl " << &bl
+            << " bl " << bl.get()
             << " bl_pos " << bl_pos
             << " bl_size " << bl_size
             << " data " << (void *)data
@@ -117,20 +109,20 @@ ssize_t file_buffer::get_data(size_t start,
                               char *dest)
 {
     logger.log(msg_type::file_buffer_blocks)
-        << "get_data:"
-        << " current_size " << current_size
+        << "get_data"
+        // << ": current_size " << current_size
         << endl;
     ssize_t data_to_copy = min(max_size, current_size - start);
 
     with_blocks(dest, data_to_copy, start,
-                [] (block &bl, char *dest, size_t bl_pos, size_t to_copy)
+                [] (block_ptr &bl, char *dest, size_t bl_pos, size_t to_copy)
     {
         // logger.log(msg_type::file_buffer_blocks)
         //     << "get_data:"
-        //     << " bl.size() " << bl.size()
+        //     << " bl->size() " << bl->size()
         //     << endl;
-        memcpy(dest, bl.data() + bl_pos, to_copy);
-        assert(!memcmp(dest, bl.data() + bl_pos, to_copy));
+        memcpy(dest, bl->data() + bl_pos, to_copy);
+        assert(!memcmp(dest, bl->data() + bl_pos, to_copy));
     });
 
     return data_to_copy;
@@ -141,29 +133,48 @@ void file_buffer::append_data(char *data, size_t size)
     logger.log(msg_type::file_buffer_blocks)
         << "append_data" << endl;
     with_blocks(data, size, current_size,
-                [] (block &bl, char *data, size_t bl_pos, size_t to_copy)
+                [] (block_ptr &bl, char *data, size_t bl_pos, size_t to_copy)
     {
-        logger.log(msg_type::file_buffer_blocks)
-            << "append_data: bl.size() before = " << bl.size()
-            << endl;
-        bl.insert(bl.end(), data, data + to_copy);
-        logger.log(msg_type::file_buffer_blocks)
-            << "append_data: bl.size() after = " << bl.size()
-            << endl;
-        assert(!memcmp(data, bl.data() + bl_pos, to_copy));
+        // logger.log(msg_type::file_buffer_blocks)
+        //     << "append_data: bl->size() before = " << bl->size()
+        //     << endl;
+
+        bl->insert(bl->end(), data, data + to_copy);
+
+        // logger.log(msg_type::file_buffer_blocks)
+        //     << "append_data: bl->size() after = " << bl->size()
+        //     << endl;
+        assert(!memcmp(data, bl->data() + bl_pos, to_copy));
     });
 
     current_size += size;
 }
 
-file_buffer::block::block(size_t size)
+size_t file_buffer::mem_used()
 {
-    // TODO reserve memory in file_cache
-    reserve(size);
-    // TODO notify file_cache of eaten memory
+    size_t result = 0;
+
+    for (auto i = blocks.begin(); i != blocks.end(); ++i)
+        result += i->second->mem_used();
+
+    return result;
+}
+
+file_buffer::block::block(size_t bl_size, file_buffer &parent)
+    : parent{parent}
+{
+    /*
+     * TODO ensure nobody else does the same at this time.
+     *      Allow only one block at a time to reserve memory?
+     */
+    parent.cache.ensure_free(bl_size);
+
+    reserve(bl_size);
+
+    parent.cache.buf_mem_used += mem_used();
 }
 
 file_buffer::block::~block()
 {
-    // TODO notify file_cache of freed memory
+    parent.cache.buf_mem_used -= mem_used();
 }
