@@ -44,7 +44,6 @@ class file_cache_item
 
 public:
     using node_ptr = std::unique_ptr<mega::MegaNode>;
-    using interval_clock = std::chrono::steady_clock;
 
     /// takes node away (move)
     file_cache_item(node_ptr node, mega::MegaApi &, class file_cache &);
@@ -61,15 +60,11 @@ public:
      */
     ssize_t get_data(size_t start, size_t max_size, char *dest);
 
-    /// Updates "last used" timestamp
-    void update_last_used();
-
     node_ptr node;
     int64_t full_size;
     bool downloading;
 
     usage_counter in_use;
-    interval_clock::time_point last_used; // TODO change value
 
     /// Memory allocated for the buffer
     size_t mem_used();

@@ -29,6 +29,12 @@ class file_buffer
         block &operator=(const block &) = delete;
 
         size_t mem_used() { return capacity(); }
+        /// Updates "last used" timestamp
+        void update_last_used();
+
+        using interval_clock = std::chrono::steady_clock;
+
+        interval_clock::time_point last_used; // TODO change value
 
         file_buffer &parent;
     };

@@ -42,12 +42,6 @@ void file_cache_item::append_data(char *data, size_t size)
     download_cond.notify_all();
 }
 
-void file_cache_item::update_last_used()
-{
-    // TODO use locking
-    last_used = interval_clock::now();
-}
-
 ssize_t file_cache_item::get_data_immediately(size_t start,
                                               size_t max_size,
                                               char *dest)

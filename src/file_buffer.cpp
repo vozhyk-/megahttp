@@ -123,6 +123,8 @@ ssize_t file_buffer::get_data(size_t start,
         //     << endl;
         memcpy(dest, bl->data() + bl_pos, to_copy);
         assert(!memcmp(dest, bl->data() + bl_pos, to_copy));
+
+        bl->update_last_used();
     });
 
     return data_to_copy;
@@ -177,4 +179,10 @@ file_buffer::block::block(size_t bl_size, file_buffer &parent)
 file_buffer::block::~block()
 {
     parent.cache.buf_mem_used -= mem_used();
+}
+
+void file_buffer::block::update_last_used()
+{
+    // TODO use locking
+    last_used = interval_clock::now();
 }
