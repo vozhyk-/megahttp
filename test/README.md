@@ -9,7 +9,7 @@ Usage
 $ cd test
 ## See "config.sh" for options, can be overridden with environment variables
 ## Start megahttp:
-$ ../bin/megahttp
+$ ../bin/megahttp& ## or in another terminal
 $ ./test.sh
 ## Tells whether the test passed and returns 0 in that case.
 ```
