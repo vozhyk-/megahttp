@@ -6,7 +6,10 @@ A simple parallel download test. Attempts to download the files in parallel and 
 Usage
 -----
 ```bash
+$ cd test
 ## See "config.sh" for options, can be overridden with environment variables
+## Start megahttp:
+$ ../bin/megahttp
 $ ./test.sh
 ## Tells whether the test passed and returns 0 in that case.
 ```
