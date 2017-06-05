@@ -17,7 +17,7 @@ class error_listener
         using std::shared_ptr;
         using mega::MegaError;
 
-        promise.set_value(
+        set_result(
             shared_ptr<MegaError>{new MegaError{*error}});
     }
 };

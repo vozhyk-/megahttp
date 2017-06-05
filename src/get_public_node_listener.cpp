@@ -15,8 +15,8 @@ void get_public_node_listener::onRequestFinish(MegaApi *,
         new MegaError(*err));
 
     if (error->getErrorCode() == MegaError::API_OK)
-        promise.set_value(unique_ptr<MegaNode>{
+        set_result(unique_ptr<MegaNode>{
                 request->getPublicMegaNode()});
     else
-        promise.set_value(nullptr);
+        set_result(nullptr);
 }
