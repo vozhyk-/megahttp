@@ -1,7 +1,7 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${megahttp_BINARY_DIR}/bin)
 
-find_package(LibHttpServer)
-find_package(PkgConfig)
+find_package(LibHttpServer REQUIRED)
+find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBMEGA libmega REQUIRED)
 
 subdirs(test)
