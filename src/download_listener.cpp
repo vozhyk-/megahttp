@@ -13,7 +13,7 @@ using namespace mega;
 using namespace logging;
 
 download_listener::download_listener(file_cache_item &cache_item)
-    : cache_item{cache_item}
+    : cache_item(cache_item)
 {
 }
 

@@ -9,7 +9,7 @@ using namespace std;
  * @param cache The whole cache for reserving memory in it
  */
 file_buffer::file_buffer(int64_t full_size, class file_cache &cache)
-    : cache{cache}, full_size{full_size}
+    : cache(cache), full_size{full_size}
 {
     /*
      * TODO ensure nobody else does the same at this time.

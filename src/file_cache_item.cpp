@@ -7,7 +7,7 @@ using namespace mega;
 file_cache_item::file_cache_item(unique_ptr<MegaNode> node,
                                  MegaApi &api,
                                  class file_cache &cache)
-    : mega_api{api}, node{move(node)},
+    : mega_api(api), node{move(node)},
       full_size{this->node->getSize()},
       downloading{false},
       buffer(full_size, cache), download_listener(*this)

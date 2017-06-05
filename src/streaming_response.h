@@ -22,7 +22,7 @@ public:
     using node_ptr = std::unique_ptr<mega::MegaNode>;
     response_callback(node_ptr node, mega::MegaApi &api)
         : file_offset{0},
-          cached{file_cache(move(node), api)},
+          cached(file_cache(move(node), api)),
           id{logging::node_id(*cached.node)}
     {
         ++cached.in_use;
